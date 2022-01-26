@@ -47,9 +47,6 @@
 </template>
 
 <script>
-// import { validUsername } from '@/utils/validate'
-// import LangSelect from '@/components/LangSelect'
-// import SocialSign from './components/SocialSignin'
 import { LoginModel } from '@/api/user'
 
 export default {
@@ -76,8 +73,6 @@ export default {
         verifyCode: [{ required: true, trigger: 'blur', validator: validateVerifyCode }]
       },
       loading: false
-      // redirect: undefined,
-      // otherQuery: {}
     }
   },
   watch: {
@@ -92,9 +87,6 @@ export default {
       immediate: true
     }
   },
-  created() {
-    // window.addEventListener('storage', this.afterQRScan)
-  },
   mounted() {
     if (this.loginForm.phone === '') {
       this.$refs.phone.focus()
@@ -102,22 +94,16 @@ export default {
       this.$refs.veryfiCode.focus()
     }
   },
-  destroyed() {
-    // window.removeEventListener('storage', this.afterQRScan)
-  },
   methods: {
     async sendCode() {
       await LoginModel.sendVerifySmsMsg({ data: this.loginForm.phone })
+      this.$message.success('发送成功')
       this.$nextTick(() => { this.$refs.verifyCode.focus() })
     },
     handleLogin() {
-      this.$refs.loginForm.validate(async (valid) => {
+      this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.loading = true
-          const res = await LoginModel.managerLogin({
-            phone: this.loginForm.phone,
-            verifyCode: this.loginForm.verifyCode,
-          })
           this.$store.dispatch('user/login', this.loginForm)
             .then(() => {
               this.$router.push({ path: this.redirect || '/', query: this.otherQuery })

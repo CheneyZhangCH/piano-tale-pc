@@ -1,0 +1,232 @@
+/* --  定义样式变量 -- */
+$theme-color: #460274;
+$theme-color-dark: #340057;
+$theme-color-hover: #EFE6F5;
+$theme-color-dark-hover: #651699;
+$theme-color-primary: #5D009C;
+$theme-color-primary-hover: #7E33B0;
+$color-primary2: #DCDFE6;
+$--border-left_default: 3px solid #F5F7FA;
+$--border-left: 3px solid $theme-color;
+
+$nav-height: 36px;
+
+$font-gray-color: #474B4E;
+
+$border-normal-color: #DCDFE6;
+
+$theme-color-red: #D9424E;
+$theme-color-red-hover: #F5483B;
+$theme-color-blue-opacity: rgba(62, 107, 223, 0.9);
+$theme-color-blue: #3E6BDF;
+$theme-color-blue-hover: #295AD8;
+$theme-color-blue-hover-opacity: rgba(41, 90, 216, 0.9);
+$theme-color-green: #32B025;
+$theme-color-green-hover: #61C057;
+
+$theme-font-color: #323233;
+$theme-font-second-color: #979B93;
+$theme-font-third-color: #979B9E;
+$theme-font-forth-color: #323233;
+$theme-font-fifth-color: #7D7E80;
+$theme-font-color-grey: #606266;
+
+// 表单宽度
+$ui-width--tiny: 80px;
+$ui-width--mini: 100px;
+$ui-width--120: 120px;
+$ui-width--140: 140px;
+$ui-width--minor: 140px;
+$ui-width--minor2: 160px;
+$ui-width--160: 160px;
+$ui-width--small: 180px;
+$ui-width--normal: 220px;
+$ui-width--secondary: 280px;
+$ui-width--medium: 360px;
+$ui-width--420: 420px;
+$ui-width--medium2: 502px;
+$ui-width--larger: 760px;
+
+// 表格
+$table-bg: #F5F7FA;
+$table-border: #EBEEF5;
+
+// 按钮
+$btn-new2-hover-bg: #EEE7F5;
+$btn-new2-hover-border: #CEB3E1;
+$btn-text-color: #0E3BBD;
+
+// 链接
+$theme-link-btn-color: #0E3BBD;
+
+// 常规颜色定义
+$theme-color-white: #FFF;
+$theme-bg-color: #F7F8FA;
+$theme-border: #EBEDF0;
+
+//$border-color-normal: #DCDEE0;
+$border-color-separator: #EAEAEA;
+
+$theme-text-color-active: #F9F0FF;
+$theme-text-color-alert: #F56C6C;
+$theme-text-color-warning: #EC503F;
+$theme-text-color-tips: #FF7377;
+
+$theme-bg-color-warning: #ED6A0C;
+$theme-bg-color-text: #FFF5ED;
+$theme-bg-color-info: #DCDEE0;
+$theme-bg-color-text-2: #FFF7F7;
+$theme-bg-color-status-tips: #EDF4FF;
+$theme-bg-color-status-rent: #F1924E;
+
+$theme-border-color-status-tips: #94B4EB;
+
+$theme-btn-status-color: #155BD4;
+$theme-btn-bg-normal: #F2F3F5;
+
+$theme-box-shadow-color: #F5F5F5;
+
+$theme-tags-font-color: #63768A;
+$theme-tags-bg-color: #F5F7F9;
+$theme-tags-bg-color2: #F3F5FB;
+$theme-tags-bg-color3: rgba(15, 59, 189, 0.03);
+$theme-tags-bg-color4: #DFEAFF;
+
+$theme-font-color-primary: #969799;
+
+$theme-btn-bg-hover: #F4F7FA;
+$theme-btn-text-warning: #DF4545;
+
+$theme-hover: #F9F9F9;
+$theme-status: #FF9000;
+
+/*
+    重新定义的scss变量 @2021-11-16
+*/
+$theme-font-white: #FFF;
+$theme-font-white-1: #F5F7FA;
+$theme-font-white-2: #DCDFE6;
+$theme-font-white-3: #DCDEE0;
+$theme-font-white-5: #F6F6F6;
+$theme-font-white-6: #F5F5F5;
+$theme-font-white-7: #B4B4B4;
+$theme-font-white-8: #DDD;
+
+$theme-font-grey: #606266;
+$theme-font-grey-1: #474B4E;
+$theme-font-grey-2: #A381BA;
+$theme-font-grey-3: #C8C9CC;
+$theme-font-grey-4: #C0C4CC;
+$theme-font-grey-5: #7D7E80;
+$theme-font-grey-6: #909399;
+$theme-font-grey-7: #979B9E;
+$theme-font-grey-8: #BFC3C6;
+$theme-font-grey-9: #969799;
+$theme-font-grey-10: #A7A8A9;
+$theme-font-grey-11: #8A8D8F;
+$theme-font-grey-12: #999;
+$theme-font-grey-13: #8C939D;
+$theme-font-grey-14: #63768A;
+$theme-font-grey-15: #666;
+$theme-font-grey-16: #755228;
+
+$theme-font-dark: #323233;
+$theme-font-dark-1: #323233;
+$theme-font-dark-2: #333;
+$theme-font-dark-3: #303133;
+$theme-font-dark-4: #0E1319;
+
+$theme-font-red: #E70000;
+$theme-font-red-1: #FA5741;
+$theme-font-red-2: #F19350;
+$theme-font-red-3: #FF6000;
+$theme-font-red-4: #F5222D;
+$theme-font-red-5: #F62000;
+$theme-font-red-6: #F44A45;
+$theme-font-red-7: #2DA641;
+$theme-font-red-8: #EE0A24;
+$theme-font-red-9: #2DA641;
+$theme-font-red-10: #D40000;
+
+$theme-font-green-1: #3DCA2E;
+$theme-font-green-2: #FEAD14;
+$theme-font-green-3: #F0FAF2;
+
+$theme-font-blue-1: #0E3BBD;
+$theme-font-blue-2: #155BD4;
+$theme-font-blue-3: #3686FE;
+$theme-font-blue-4: #340057;
+$theme-font-blue-5: #0C60E1;
+$theme-font-blue-6: #460274;
+$theme-font-blue-7: #114DB4;
+$theme-font-blue-8: #1482F0;
+$theme-font-blue-9: #4678AD;
+$theme-font-blue-10: #0F3BBD;
+
+$theme-bg-white: #FFF;
+$theme-bg-white-1: #F5F7FA;
+$theme-bg-white-2: #DCDFE6;
+$theme-bg-white-4: #D8D8D8;
+$theme-bg-white-5: #F6F6F6;
+$theme-bg-white-6: #FAFAFA;
+$theme-bg-white-7: #F2F2F2;
+$theme-bg-white-8: #F9F9F9;
+$theme-bg-white-9: #F7F8FA;
+$theme-bg-white-10: #F5F5F5;
+$theme-bg-white-11: #F1F1F1;
+$theme-bg-white-12: #F7F7F7;
+$theme-bg-white-13: #FBFBFB;
+$theme-bg-white-14: #F9F0FF;
+$theme-bg-white-15: #F5F7F9;
+$theme-bg-white-16: #F8FAFF;
+$theme-bg-white-17: #FEE9EA;
+$theme-bg-white-18: #FEEDEB;
+$theme-bg-white-19: #FFF5E3;
+$theme-bg-white-20: #E7F8E5;
+$theme-bg-white-21: #EDE6F1;
+$theme-bg-white-22: #E6E6E6;
+$theme-bg-white-23: #F0F2F5;
+$theme-bg-white-24: #F2F6FB;
+$theme-bg-white-25: #ECECEC;
+$theme-bg-white-26: #ECA66D;
+
+$theme-bg-green-0: #D7EBD9;
+
+$theme-bg-dark-0: #000;
+$theme-bg-dark-1: #323233;
+$theme-bg-dark-2: #333;
+$theme-bg-dark-3: rgba(0, 0, 0, 0.6);
+
+$theme-bg-blue-1: #330157;
+$theme-bg-blue-2: #0E3BBD;
+$theme-bg-blue-3: #3686FE;
+$theme-bg-blue-4: #5D009B;
+$theme-bg-blue-5: #7D33B0;
+
+$theme-bg-red-1: #2DA641;
+$theme-bg-red-2: #F6F0F9;
+$theme-bg-red-3: #FAF7FC;
+
+$theme-bg-grey: #606266;
+$theme-bg-grey-1: #666;
+
+$theme-border-white: #FFF;
+$theme-border-white-1: #F5F7FA;
+$theme-border-white-2: #DCDFE6;
+$theme-border-white-3: #DCDEE0;
+$theme-border-white-5: #F6F6F6;
+$theme-border-white-6: #E7EBEE;
+$theme-border-white-7: #F2F2F2;
+$theme-border-white-8: #F5F5F5;
+$theme-border-white-9: #F5F7FF;
+$theme-border-white-10: #E4E7ED;
+$theme-border-white-11: #EDF4FF;
+$theme-border-white-12: #FFEBEB;
+$theme-border-white-13: #D9D9D9;
+$theme-border-white-14: #DBE4FB;
+
+$theme-border-blue-1: #0E3BBD;
+$theme-border-blue-2: #409EFF;
+$theme-border-blue-3: #3686FE;
+$theme-border-blue-4: #5D009B;
+$theme-border-dark-1: #AEACB0;

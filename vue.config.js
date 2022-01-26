@@ -35,6 +35,14 @@ module.exports = {
       }
     }
   },
+  css: {
+    extract: false,
+    loaderOptions: {
+      scss: {
+        prependData: `@import "@/styles/vars.scss";`
+      }
+    }
+  },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
     // it can be accessed in index.html to inject the correct title.
@@ -77,6 +85,20 @@ module.exports = {
         symbolId: 'icon-[name]'
       })
       .end()
+
+    // 使用element-ui date-panel.vue
+    config.module
+      .rule('compile')
+      .test(/\.js$/)
+      .include
+      .add(resolve('node_modules/element-ui/packages'))
+      .add(resolve('node_modules/element-ui/src'))
+      .end()
+      .exclude
+      .add(resolve('node_modules/element-ui/src/utils/date.js'))
+      .end()
+      .use('babel')
+      .loader('babel-loader')
 
     config
       .when(process.env.NODE_ENV !== 'development',

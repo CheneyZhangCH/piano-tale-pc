@@ -1,0 +1,57 @@
+.default th {
+    color: #586276;
+    background-color: $theme-bg-white;
+}
+.aika-table {
+    .aika-table-column-inner {
+        text-align: left;
+        .aika-table-column-link {
+            font-weight: bold;
+            color: $btn-text-color !important;
+            text-align: left;
+            text-decoration: none !important;
+            cursor: pointer;
+        }
+        .aika-table-column-link-disabled {
+            color: $theme-font-grey-4 !important;
+            cursor: not-allowed !important;
+        }
+        .aika-table-column-link-tags {
+            display: inline-flex;
+            align-items: center;
+            height: 18px;
+            padding: 0 4px;
+            margin-left: 6px;
+            font-size: 12px;
+            color: $theme-font-grey-14;
+            background: $theme-bg-white-15;
+            border: none;
+            border-radius: 2px;
+            &:first-child {
+                margin-left: 0;
+            }
+            &.approved {
+                height: 18px;
+                color: $theme-font-white;
+                background: $theme-bg-red-1;
+            }
+        }
+    }
+    .mklij-table-cell {
+        &.mklij-table-cell-clicked {
+            .cell {
+                color: $theme-font-grey-9 !important;
+            }
+            .aika-table-column-link {
+                color: $theme-font-grey-9 !important;
+            }
+            .aika-table-column-link-disabled {
+                color: $theme-font-grey-9 !important;
+            }
+        }
+    }
+
+    ::v-deep .iconfont-gantanhao {
+        font-size: 14px;
+    }
+}

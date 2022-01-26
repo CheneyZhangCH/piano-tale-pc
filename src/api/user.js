@@ -28,12 +28,12 @@ import { post } from './http'
 /** ------------------------ 登录服务接口 -------------------------**/
 export const LoginModel = {
   // 获取短信验证码
-  sendVerifySmsMsg() {
-    return post(`login/sendVerifySmsMsg`)
+  sendVerifySmsMsg(data) {
+    return post(`login/sendVerifySmsMsg`, data)
   },
   // 登录
   managerLogin(data) {
-    return post(`login/sendVerifySmsMsg`, data)
+    return post(`login/managerLogin`, data)
   }
 }
 

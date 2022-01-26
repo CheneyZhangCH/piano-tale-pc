@@ -1,0 +1,210 @@
+.aika-form {
+  ::v-deep .el-form-item {
+    min-height: 33px;
+    .el-form-item__label {
+      width: 112px !important;
+    }
+    .el-input,
+    .el-select,
+    .el-cascader {
+      width: $ui-width--small;
+    }
+    .el-textarea {
+      width: 96%;
+      max-width: $ui-width--larger;
+    }
+    // 通用表单Tiny宽度
+    &.widthTiny{
+      .el-input,
+      .el-select {
+        width: 96%;
+        max-width: $ui-width--tiny;
+      }
+    }
+    // 通用表单mini宽度
+    &.widthMini {
+      .el-input,
+      .el-select {
+        width: 96%;
+        max-width: $ui-width--mini;
+      }
+    }
+    // 通用表单minor宽度
+    &.widthMinor {
+        .el-input,
+        .el-select {
+            width: 96%;
+            max-width: $ui-width--minor;
+        }
+    }
+    // 通用表单minor2宽度
+    &.widthMinor2 {
+      .el-input,
+      .el-select {
+        width: 96%;
+        max-width: $ui-width--minor2;
+      }
+    }
+    // 通用表单normal宽度
+    &.widthNormal {
+      .vue-treeselect,
+      .el-input,
+      .el-select,
+      .input-click{
+        width: 96%;
+        max-width: $ui-width--normal;
+      }
+      .mklaj-input-number {
+        width: 100%!important;
+        max-width: $ui-width--normal;
+        .el-input{
+            width: 100%;
+            max-width: $ui-width--normal;
+        }
+      }
+    }
+    // 通用表单宽度
+    &.widthSecondary {
+      .vue-treeselect,
+      .el-input,
+      .el-select {
+        width: 96%;
+        max-width: $ui-width--secondary;
+      }
+    }
+    // 通用表单medium宽度
+    &.widthMedium {
+      .vue-treeselect,
+      .el-input,
+      .el-select {
+        width: 96%;
+        max-width: $ui-width--medium;
+      }
+      .input-click {
+        width: 96%;
+        max-width: $ui-width--medium;
+      }
+    }
+    // 通用表单large宽度
+    &.widthMedium2 {
+        .el-input,
+        .el-select {
+            width: 96%;
+            max-width: $ui-width--medium2;
+        }
+    }
+
+    // 通用表单large宽度
+    &.widthLarge {
+      .el-input,
+      .el-select {
+        width: 96%;
+        max-width: $ui-width--larger;
+      }
+    }
+    &.text {
+      // 英文换行
+      .el-form-item__content {
+        span {
+          word-break: break-word;
+        }
+      }
+    }
+    // &.textarea,
+    // &.checkboxList,
+    // &.radio,
+    // &.tree {
+    //     .el-form-item__content {
+    //         height: auto;
+    //     }
+    // }
+    .el-input {
+      &.has-unit--append {
+        position: relative;
+        .el-input__inner {
+          border-radius: 4px;
+        }
+        .el-input-group__append {
+          padding: 0 10px;
+          background-color: transparent;
+          border: 0;
+          font-size: 14px;
+          color: $theme-font-dark-1;
+        }
+      }
+      // &__inner {
+      //     width: 180px
+      // }
+      &.input-num {
+        width: auto;
+        .el-input__inner {
+          width: 180px;
+        }
+      }
+    }
+    // 上传组件高度
+    &.attachmentTooltip {
+      height: 33px;
+      .el-form-item__content {
+        height: 33px;
+      }
+    }
+    // 上传组件高度
+    &.attachmentTooltipOss {
+      height: 33px;
+      .el-form-item__content {
+        height: 33px;
+      }
+    }
+  }
+  // 弹窗表单文本域
+  &.dialog-form {
+    ::v-deep .el-form-item {
+      .el-textarea {
+        width: 100%;
+      }
+    }
+  }
+  .weChat {
+    ::v-deep .el-form-item__label {
+      padding-top: 36px;
+    }
+  }
+  .avatar-uploader {
+    ::v-deep .el-upload {
+      border: 1px dashed $theme-border-white-13;
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      &:hover {
+        border-color: $theme-border-blue-2;
+      }
+    }
+    .avatar-uploader-icon {
+      font-size: 28px;
+      color: $theme-font-grey-13;
+      width: 100px;
+      height: 100px;
+      line-height: 100px;
+      text-align: center;
+    }
+    .el-upload__tip {
+      position: absolute;
+      top: 28px;
+      left: 120px;
+    }
+    .avatar {
+      width: 100px;
+      height: 100px;
+      display: block;
+    }
+  }
+  .subtitle {
+    font-size: 16px;
+    font-weight: bold;
+  }
+}
+.input-number-unit {
+  margin-left: 16px;
+}

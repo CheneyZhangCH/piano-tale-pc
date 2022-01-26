@@ -1,0 +1,71 @@
+
+@import "@/styles/vars";
+
+.el-form-item {
+    &.button,
+    &.checkbox,
+    &.radio,
+    &.checkboxList {
+        margin-right: 10px;
+        .el-form-item__label {
+            display: none;
+            min-width: 0;
+            width: 0;
+        }
+    }
+    // 通用表单tiny宽度
+    &.widthTiny{
+        .el-input,
+        .el-select {
+            width: $ui-width--tiny;
+        }
+    }
+    // 通用表单mini宽度
+    &.widthMini {
+        .el-input,
+        .el-select {
+            width: $ui-width--mini;
+        }
+    }
+    // 通用表单mini宽度
+    &.widthMinor {
+        .el-input,
+        .el-select {
+            width: $ui-width--minor;
+        }
+    }
+
+    // 通用表单medium宽度
+    &.widthSecondary{
+        .el-input,
+        .el-select {
+            width: $ui-width--secondary;
+        }
+    }
+    // 通用表单medium宽度
+    &.widthMedium {
+        .el-input,
+        .el-select {
+            width: $ui-width--medium;
+        }
+    }
+    &.widthLarge {
+        .el-input,
+        .el-select {
+            width: 500px;
+        }
+    }
+    .el-input {
+        position: relative;
+        .el-input__inner {
+            border-radius: 4px;
+        }
+        .el-input-group__append {
+            padding: 0 10px;
+            background-color: transparent;
+            border: 0;
+            font-size: 14px;
+            color: #0b0f12;
+        }
+    }
+}

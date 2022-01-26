@@ -56,11 +56,6 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: '/auth-redirect',
-    component: () => import('@/views/login/auth-redirect'),
-    hidden: true
-  },
-  {
     path: '/404',
     component: () => import('@/views/error-page/404'),
     hidden: true
@@ -79,7 +74,7 @@ export const constantRoutes = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: 'dashboard', icon: 'dashboard', affix: true }
+        meta: { title: 'dashboard', affix: true }
       }
     ]
   },
@@ -180,6 +175,19 @@ export const asyncRoutes = [
         component: () => import('@/views/icons/index'),
         name: 'Icons',
         meta: { title: 'icons', icon: 'icon', noCache: true }
+      }
+    ]
+  },
+
+  {
+    path: '/course',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/course/index'),
+        name: 'course',
+        meta: { title: '课程分类', noCache: true }
       }
     ]
   },
