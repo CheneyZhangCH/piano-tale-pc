@@ -52,7 +52,7 @@ export default {
           fixed: 'right',
           width: '100px',
           list: [
-            { func: vm.handleEdit, formatter(row) { return { type: 'text', label: '修改' } } },
+            { func: vm.handleEdit, formatter(row) { return { type: 'text', label: '修改', disabled: !row.active  } } },
             { func: vm.handleToggleActive, formatter(row) { return { type: 'text', label: row.active ? '关闭' : '开启' } } }
           ]
         }

@@ -68,7 +68,7 @@
           <mklij-switch v-else-if="item.type === 'switch'" :item="item" :form="form" />
 
           <!-- 下拉框 -->
-          <mklij-select v-else-if="item.type === 'select'" :ref="item.prop" :item="item" :form="form" />
+          <mklij-select v-else-if="item.type === 'select'" :ref="item.prop" :item="item" :form="form" :index="index" />
 
           <!-- 单选按钮 -->
           <template v-else-if="item.type === 'radio'">

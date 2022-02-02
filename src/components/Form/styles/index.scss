@@ -72,6 +72,7 @@
     &.widthSecondary {
       .vue-treeselect,
       .el-input,
+      .el-input-number,
       .el-select {
         width: 96%;
         max-width: $ui-width--secondary;

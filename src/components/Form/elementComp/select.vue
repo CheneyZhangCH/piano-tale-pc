@@ -7,48 +7,51 @@
  * @Description:
 -->
 <template>
-    <span>
-        <el-select
-            :ref="item.prop"
-            v-model="form[item.prop]"
-            :disabled="item.disabled"
-            filterable
-            :filter-method="item.filterMethod"
-            :clearable="item.clearable !== undefined ? item.clearable : true"
-            :multiple="item.multiple"
-            :multiple-limit="item.multipleLimit || 0"
-            :remote="item.remote"
-            :remote-method="item.remoteMethod"
-            :reserve-keyword="item.reserveKeyword"
-            :collapse-tags="item.collapseTags"
-            :placeholder="item.placeholder || '请选择'"
-            :loading="item.loading"
-            :popper-class="item.optionCustomTipVisible && item.optionCustomTipBtn ? 'showTips showTipsBtn' : item.optionCustomTipVisible ? 'showTips' : item.optionCustomTipBtn ? 'showTipsBtn' : ''"
-            @change="item.func ? item.func($event) : {}"
-            @blur="item.blur ? item.blur($event) : {}"
-            @clear="item.clear ? item.clear() : null"
-        >
-            <div v-if="Array.isArray(item.opts) && item.opts.length > 0 && item.optionCustomTipVisible" class="custom-tips">
-                <span>{{ item.optionCustomTip }}</span>
-                <span v-if="item.optionCustomTipBtn" @click="item.optionCustomTipBtnFunc ? item.optionCustomTipBtnFunc() : {}"  class="custom-tips-btn">{{ item.optionCustomTipBtnText }}</span>
-            </div>
-            <el-option
-                v-for="(opt, optIndex) in item.opts"
-                :key="opt.id || optIndex"
-                :label="item.optLabel ? opt[item.optLabel] : opt.label"
-                :value="item.optVal ? opt[item.optVal] : opt.value"
-                :disabled="opt.disabled"
-            />
-        </el-select>
-        <span v-if="item.append" style="margin-left: 10px;">{{ item.append }}</span>
-    </span>
+  <span>
+    <el-select
+      :ref="item.prop"
+      v-model="form[item.prop]"
+      :disabled="item.disabled"
+      filterable
+      :filter-method="item.filterMethod"
+      :clearable="item.clearable !== undefined ? item.clearable : true"
+      :multiple="item.multiple"
+      :multiple-limit="item.multipleLimit || 0"
+      :remote="item.remote"
+      :remote-method="item.remoteMethod"
+      :reserve-keyword="item.reserveKeyword"
+      :collapse-tags="item.collapseTags"
+      :placeholder="item.placeholder || '请选择'"
+      :loading="item.loading"
+      :popper-class="item.optionCustomTipVisible && item.optionCustomTipBtn ? 'showTips showTipsBtn' : item.optionCustomTipVisible ? 'showTips' : item.optionCustomTipBtn ? 'showTipsBtn' : ''"
+      @change="item.func ? item.func($event, index) : {}"
+      @blur="item.blur ? item.blur($event) : {}"
+      @clear="item.clear ? item.clear() : null"
+    >
+      <div v-if="Array.isArray(item.opts) && item.opts.length > 0 && item.optionCustomTipVisible" class="custom-tips">
+        <span>{{ item.optionCustomTip }}</span>
+        <span v-if="item.optionCustomTipBtn" class="custom-tips-btn" @click="item.optionCustomTipBtnFunc ? item.optionCustomTipBtnFunc() : {}">{{ item.optionCustomTipBtnText }}</span>
+      </div>
+      <el-option
+        v-for="(opt, optIndex) in item.opts"
+        :key="opt.id || optIndex"
+        :label="item.optLabel ? opt[item.optLabel] : opt.label"
+        :value="item.optVal ? opt[item.optVal] : opt.value"
+        :disabled="opt.disabled"
+      />
+    </el-select>
+    <span v-if="item.append" style="margin-left: 10px;">{{ item.append }}</span>
+  </span>
 </template>
 
 <script>
 import compProps from '../mixins/props'
 export default {
-    name: 'MklijSelect',
-    mixins: [compProps]
+  name: 'MklijSelect',
+  mixins: [compProps],
+  props: {
+    index: { type: Number }
+  }
 }
 </script>
 <style lang="scss">

@@ -231,6 +231,18 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path: '/timetable',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/timetable/index'),
+        name: 'package',
+        meta: { title: '课表管理', noCache: true }
+      }
+    ]
+  },
 
   /** when your routing map is too long, you can split it into small modules **/
   componentsRouter,

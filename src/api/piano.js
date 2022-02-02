@@ -93,3 +93,27 @@ export const PackageModel = {
     return get(`/manager/coursePackage/getCoursePackage?coursePackageId=${id}`)
   }
 }
+
+/** ------------------------ 课表接口 -------------------------**/
+export const TimetableModel = {
+  // 获取列表
+  getList(data) {
+    return post(`manager/courseTimetable/page`, data)
+  },
+  // 新增
+  add(data) {
+    return post(`/manager/courseTimetable/save`, data)
+  },
+  // 修改
+  update(data) {
+    return post(`/manager/courseTimetable/update`, data)
+  },
+  // 切换状态
+  updateActive(data) {
+    return post(`/manager/courseTimetable/updateActive`, data)
+  },
+  // 获取详情
+  detail(data) {
+    return post(`/manager/courseTimetable/getCourseTimetable`, data)
+  }
+}

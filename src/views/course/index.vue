@@ -46,15 +46,11 @@ export default {
           list: [
             {
               func: vm.handleEdit,
-              formatter(row) {
-                return { type: 'text', label: '修改' }
-              }
+              formatter(row) { return { type: 'text', label: '修改', disabled: !row.active } }
             },
             {
               func: vm.handleToggleActive,
-              formatter(row) {
-                return { type: 'text', label: row.active ? '关闭' : '开启' }
-              }
+              formatter(row) { return { type: 'text', label: row.active ? '关闭' : '开启' } }
             }
           ]
         }
