@@ -1,9 +1,14 @@
 .aika-form {
   ::v-deep .el-form-item {
     min-height: 33px;
-    .el-form-item__label {
-      width: 112px !important;
+    &.textarea {
+      .el-form-item__content {
+        display: flex;
+      }
     }
+    //.el-form-item__label {
+    //  width: 112px !important;
+    //}
     .el-input,
     .el-select,
     .el-cascader {

@@ -1,8 +1,301 @@
+@import './vars';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+a {
+  text-decoration: none;
+}
+
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+}
+
+// 使用伪类清除浮动代替overflow: hidden;
+.clearfix {
+  // overflow:hidden;
+  zoom: 1;
+
+  &::after {
+    content: '';
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.visible {
+  display: block;
+}
+
+ul, li {
+  list-style: none;
+}
+
+.el-table {
+  tbody {
+    td {
+      &.is-link {
+        .el-button--text {
+          width: 100%;
+
+          & > span {
+            display: inline-block;
+            width: 100%;
+            color: $theme-font-dark-1;
+            text-decoration: underline;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+        }
+
+        &:hover {
+          .el-button--text {
+            & > span {
+              color: $btn-text-color;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .el-table__footer-wrapper {
+    ::v-deep.cell {
+      font-size: 14px;
+      font-weight: bold;
+    }
+  }
+}
+
+.el-tabs {
+  &__header {
+    margin: 0 0 25px;
+  }
+
+  &__item {
+    min-width: 100px;
+    height: 35px;
+    // padding: 0;
+    text-align: center;
+    line-height: 30px;
+    font-size: 16px;
+    font-weight: 600;
+
+    &.is-active {
+      font-size: 22px;
+      font-weight: 600;
+      color: $theme-font-dark-1;
+    }
+  }
+
+  &__nav-wrap::after {
+    height: 1px;
+  }
+}
+
+.el-radio {
+  font-weight: normal;
+}
+
+/*
+* @Description: 表格样式
+* @Author: ge.rongyin
+*/
+.aika-table {
+  .aika-table-column-inner {
+    text-align: left;
+
+    .aika-table-column-link {
+      cursor: pointer;
+      color: $theme-color-primary !important;
+      text-align: left;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    // 列样式-附加内容
+    .aika-table-column-append {
+      display: inline-block;
+      margin: 0 0 0 8px;
+      padding: 3px 6px;
+      background-color: $theme-bg-white-17;
+      border-radius: 6px;
+      color: $theme-font-red-4;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 12px;
+      word-break: keep-all;
+
+      &:empty {
+        display: none;
+      }
+    }
+
+    // 前置图标
+    .aika-table-column-prepend-icon {
+      display: inline-block;
+      margin: 0 8px 0 0;
+      color: $theme-font-red-4;
+    }
+
+    // 附加图标
+    .aika-table-column-append-icon {
+      display: inline-block;
+      margin: 0 0 0 8px;
+      color: $theme-font-red-4;
+    }
+
+    //  标签
+    .el-tag {
+      margin-left: 10px;
+    }
+  }
+
+  ::v-deep .table-column-html {
+    p {
+      span {
+        white-space: pre-wrap;
+      }
+    }
+  }
+}
+
+// 正常大小 => 1.2大小 =》正常
+@keyframes zoomAnimate {
+  0% {
+    transform: scale(.8) rotate(-15deg);
+  }
+  30% {
+    transform: scale(1.2) rotate(8deg);
+  }
+  40% {
+    transform: scale(1.2) rotate(0)
+  }
+  100% {
+    transform: scale(1.2) rotate(0)
+  }
+}
+
+.pd-25 {
+  padding-bottom: 25px;
+}
+
+.pd-16 {
+  padding: 16px;
+}
+
+.pt-16 {
+  padding-top: 16px;
+}
+
+.pr-16 {
+  padding-right: 16px;
+}
+
+.pb-16 {
+  padding-bottom: 16px;
+}
+
+.pl-16 {
+  padding-left: 16px;
+}
+
+.mr-20 {
+  margin-right: 20px;
+}
+
+.ml-20 {
+  margin-left: 20px;
+}
+
+.mt-16 {
+  margin-top: 16px;
+}
+
+.mr-16 {
+  margin-right: 16px;
+}
+
+.mb-16 {
+  margin-bottom: 16px;
+}
+
+.ml-16 {
+  margin-left: 12px;
+}
+
+.mt-12 {
+  margin-top: 12px;
+}
+
+.mr-12 {
+  margin-right: 12px;
+}
+
+.mb-12 {
+  margin-bottom: 12px;
+}
+
+.ml-12 {
+  margin-left: 12px !important;
+}
+
+
 #app {
   .page {
     width: 100%;
     min-height: 100%;
     background-color: #FFF;
     padding: 16px;
+  }
+
+  .empty {
+    width: 100%;
+    height: 54px;
+    margin: 0 auto;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 54px;
+    color: $theme-font-grey-1;
+    text-align: center;
+  }
+
+  .page-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 99;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    padding: 8px;
+    background-color: #FFF;
+    box-shadow: 0 0 2px 2px #F5F5F5;
   }
 }

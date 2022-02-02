@@ -17,7 +17,7 @@
     <slot name="header" />
     <slot name="custom" />
     <template v-for="(item, index) in forms">
-      <el-col v-if="!item.hidden" :key="index" :span="item.span || spanCount" :style="item.colStyle" :class="item.className">
+      <el-col v-if="!item.hidden" :key="item.prop + index" :span="item.span || spanCount" :style="item.colStyle" :class="item.className">
         <el-form-item v-if="!item.ownForm" :class="item.className || item.inputType || item.type" :label="`${item.label || ''}`" :prop="item.prop" :rules="item.rules" :label-width="item.labelWidth" :style="item.style">
           <custom-prepend-dom v-if="item.prependDom" :item="item.prependDom" />
           <template v-if="!item.label || item.labelStyle || item.requiredSign || item.tooltip || item.type === 'subTitle' || item.labelIcon" #label>
@@ -34,7 +34,7 @@
                   <i class="el-icon-warning-outline" style="margin-left: 5px;" />
                 </template>
                 <template v-if="item.tooltipSlot" #content>
-                  <div v-for="item in item.tooltipContentList" :key="item">{{ item }}</div>
+                  <div v-for="content in item.tooltipContentList" :key="content">{{ content }}</div>
                 </template>
               </el-tooltip>
               <i v-if="!item.iconHidden" class="iconfont" :class="item.iconName" />
@@ -46,10 +46,10 @@
           </template>
 
           <!-- 户型 -->
-<!--          <custom-house-type v-if="item.type === 'houseType'" :item="item" :form="form" />-->
+          <!--          <custom-house-type v-if="item.type === 'houseType'" :item="item" :form="form" />-->
 
           <!-- 输入框 -->
-          <template v-else-if="item.type === 'input'">
+          <template v-if="item.type === 'input'">
             <mklij-textarea v-if="item.inputType === 'textarea'" :item="item" :form="form" />
             <mklij-input-number v-else-if="item.inputType === 'number'" :item="item" :form="form" />
             <mklij-input v-else :item="item" :form="form" />
@@ -99,56 +99,6 @@
               </template>
             </el-upload>
           </template>
-
-          <!-- 文件编辑上传 -->
-<!--          <custom-upload-file-->
-<!--            v-else-if="item.type === 'uploadFile'"-->
-<!--            :headers="item.headers"-->
-<!--            :show-upload-btn="item.showUploadBtn"-->
-<!--            :max-size="item.maxSize"-->
-<!--            :multiple="item.multiple"-->
-<!--            :action="item.action"-->
-<!--            :data="item.data"-->
-<!--            :show-file-list="item.showFileList"-->
-<!--            :file-list="form[item.prop] || []"-->
-<!--            :accept="item.accept"-->
-<!--            :exceed-tips="item.exceedTips"-->
-<!--            :limit="item.limit"-->
-<!--            @handleDeleteUploadedFile="handleDeleteUploadedFile($event, item, index)"-->
-<!--            @newUploadSuccess="newUploadSuccess($event,item)"-->
-<!--            @preview="url => {$emit('preview',url)}"-->
-<!--          />-->
-
-          <!-- 图片上传 -->
-<!--          <mklij-new-upload-->
-<!--            v-else-if="item.type === 'newUpload'"-->
-<!--            :headers="item.headers"-->
-<!--            :max-size="item.maxSize"-->
-<!--            :multiple="item.multiple"-->
-<!--            :action="item.action"-->
-<!--            :data="item.data"-->
-<!--            :show-file-list="item.showFileList"-->
-<!--            :file-list="form[item.prop]"-->
-<!--            :accept="item.accept"-->
-<!--            :exceed-tips="item.exceedTips"-->
-<!--            :limit="item.limit"-->
-<!--            @newUploadSuccess="newUploadSuccess($event, item)"-->
-<!--            @preview="url => {$emit('preview', url)}"-->
-<!--          >-->
-<!--            <i class="el-icon-plus" />-->
-<!--          </mklij-new-upload>-->
-
-<!--          &lt;!&ndash; 图片上传 &ndash;&gt;-->
-<!--          <mklij-new-upload-oss v-else-if="item.type === 'newUploadOss'" :item="item" :attachment-list="form[item.prop]" @reset="item.reset() || reset">-->
-<!--            <div v-if="item.btnText" class="upload-code">-->
-<!--              <i class="el-icon-plus" />-->
-<!--              <span>{{ item.btnText }}</span>-->
-<!--            </div>-->
-<!--            <i v-else class="el-icon-plus" />-->
-<!--          </mklij-new-upload-oss>-->
-
-          <!-- 图片列表展示 -->
-<!--          <custom-imgList v-else-if="item.type === 'imgList'" :item="item" :form="form" />-->
 
           <!-- 树形 :check-strictly="true" -->
           <el-tree v-else-if="item.type === 'tree'" ref="tree" :data="item.data" show-checkbox :node-key="item.nodeKey || 'id'" :props="item.props || defaultProps" />
@@ -207,6 +157,8 @@
             :disabled="item.disabled"
           />
 
+          <aika-table v-else-if="item.type === 'table'" :table-data="form[item.dataKey]" :row-key="'id'" :columns="item.columns" />
+
           <!-- close tags -->
           <custom-close-tags v-else-if="item.type === 'close-tags'" :item="item" :form="form" />
 
@@ -215,24 +167,16 @@
             <el-tag v-for="(tag,i) in item.opts" :key="i" :class="[tag.selected ? 'selected' : '', tag.active ? 'active-tag' : '', tag.disabled ? 'disabled-tag' : '']" @click="item.func ? item.func(tag, i) : {}">{{ tag.label }}</el-tag>
           </template>
 
-          <!--
-                        自定义模板
-                        1. js
-                        scopedSlot: 'demoSlot'
-                        2. template
-                        <template v-slot="demoSlot">
-                            <div class="demo">
-                                这个是内容
-                            </div>
-                        </template>
-                    -->
           <slot v-if="item.scopedSlots && item.scopedSlots.customRender" :name="item.scopedSlots.customRender" />
 
           <slot v-if="item.scopedSlot" :name="item.scopedSlot" :item="item" :form="form" />
 
           <!-- 这个组件位置不要动，保证在最后面 -->
           <!-- 跟在表单内容后（可用于单位显示，解释说明） -->
-          <custom-append-dom v-if="item.appendDom" :item="item.appendDom" :index="index" :origin="item" />
+          <template v-if="item.appendDom && Array.isArray(item.appendDom)">
+            <custom-append-dom v-for="dom in item.appendDom" :key="dom.text" :item="dom" :index="index" :origin="item" />
+          </template>
+          <custom-append-dom v-if="item.appendDom && !Array.isArray(item.appendDom)" :item="item.appendDom" :index="index" :origin="item" />
         </el-form-item>
         <template v-else>
           <ownform-input-group v-if="item.type === 'inputGroup'" :item="item" :form="form" />
@@ -270,12 +214,13 @@ import {
   customMulitEmployee,
   customMulitInput,
   CustomBuildingCodeSelect,
-  CustomHouseType,
-  CustomImgList,
+  // CustomHouseType,
+  // CustomImgList,
   customHtml,
   // customTreeselect,
   CustomAppendDom,
   CustomPrependDom,
+  // CustomUploadQiniu,
   // CustomUploadFile,
   CustomFuzzySelect,
   CustomCloseTags
@@ -310,14 +255,15 @@ export default {
     customMulitEmployee,
     customMulitInput,
     CustomBuildingCodeSelect,
-    CustomHouseType,
-    CustomImgList,
+    // CustomHouseType,
+    // CustomImgList,
     customHtml,
     // customTreeselect,
     CustomAppendDom,
     CustomPrependDom,
     ownformInputGroup,
     // CustomUploadFile,
+    // CustomUploadQiniu,
     CustomFuzzySelect,
     CustomCloseTags
   },
@@ -329,16 +275,16 @@ export default {
     size: { type: String, default: 'small' },
     labelPosition: { type: String, default: 'left' },
     labelWidth: { type: String, default: '92px' },
-    formStyle: { type: Object },
-    rules: { type: Object },
+    formStyle: { type: Object, default: () => ({}) },
+    rules: { type: Object, default: () => ({}) },
     spanCount: { type: Number, default: 24 },
-    forms: { type: Array }, // 表单组
+    forms: { type: Array, default: () => ([]) }, // 表单组
     initialValues: { type: Object, default: () => { return {} } } // 初始值
   },
   data() {
     return {
       form: {
-        houseType: {}
+        // houseType: {}
       },
       defaultProps: {
         children: 'children',
@@ -516,7 +462,7 @@ export default {
     // 重置表单
     reset() {
       this.$refs.form.resetFields()
-      this.form.houseType = {}
+      // this.form.houseType = {}
       // this.form.fileList = []
     },
 

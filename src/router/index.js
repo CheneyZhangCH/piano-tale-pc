@@ -192,6 +192,46 @@ export const asyncRoutes = [
     ]
   },
 
+  {
+    path: '/book',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/book/index'),
+        name: 'book',
+        meta: { title: '教材体系', noCache: true }
+      },
+      {
+        path: 'detail/:id',
+        hidden: true,
+        component: () => import('@/views/book/detail'),
+        name: 'bookDetail',
+        meta: { title: '教材详情', noCache: true }
+      },
+      {
+        path: 'unit/add',
+        hidden: true,
+        component: () => import('@/views/book/unit/add'),
+        name: 'unitAdd',
+        meta: { title: '新增单元', noCache: true }
+      }
+    ]
+  },
+
+  {
+    path: '/package',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/package/index'),
+        name: 'package',
+        meta: { title: '课程包', noCache: true }
+      }
+    ]
+  },
+
   /** when your routing map is too long, you can split it into small modules **/
   componentsRouter,
   chartsRouter,

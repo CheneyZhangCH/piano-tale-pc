@@ -6,16 +6,16 @@
         <navbar />
       </div>
       <app-main />
-      <right-panel v-if="showSettings">
-        <settings />
-      </right-panel>
+      <!--      <right-panel v-if="showSettings">-->
+      <!--        <settings />-->
+      <!--      </right-panel>-->
     </div>
   </div>
 </template>
 
 <script>
-import RightPanel from '@/components/RightPanel'
-import { AppMain, Navbar, Settings, Sidebar } from './components'
+// import RightPanel from '@/components/RightPanel'
+import { AppMain, Navbar, Sidebar } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 import { mapState } from 'vuex'
 
@@ -24,17 +24,17 @@ export default {
   components: {
     AppMain,
     Navbar,
-    RightPanel,
-    Settings,
-    Sidebar,
+    // RightPanel,
+    // Settings,
+    Sidebar
   },
   mixins: [ResizeMixin],
   computed: {
     ...mapState({
       sidebar: state => state.app.sidebar,
       device: state => state.app.device,
-      showSettings: state => state.settings.showSettings,
-      needTagsView: state => state.settings.tagsView,
+      // showSettings: state => state.settings.showSettings,
+      // needTagsView: state => state.settings.tagsView,
       fixedHeader: state => state.settings.fixedHeader
     }),
     classObj() {

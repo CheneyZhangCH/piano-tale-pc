@@ -62,7 +62,7 @@ export { default as dialogTable } from './Dialog/Table'
 // 附件展示
 // export { default as attachmentTooltip } from './BusinessComp/attachmentTooltip'
 
-// export { default as attachmentTooltipOss } from './BusinessComp/attachmentTooltipOss'
+export { default as attachmentTooltipOss } from './BusinessComp/attachmentTooltipOss'
 
 // 其他
 // export { default as statusLabel } from './BusinessComp/statusLabel'

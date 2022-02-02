@@ -25,7 +25,7 @@
 
 <script>
 import paginationMixin from '@/components/Table/mixin'
-import { CourseModel } from '@/api/course'
+import { CourseModel } from '@/api/piano'
 
 export default {
   name: 'Course',
@@ -53,7 +53,7 @@ export default {
             {
               func: vm.handleToggleActive,
               formatter(row) {
-                return { type: 'text', label: row.active ? '关闭' : '开启', disabled: !row.active }
+                return { type: 'text', label: row.active ? '关闭' : '开启' }
               }
             }
           ]
@@ -70,12 +70,14 @@ export default {
           placeholder: '最多输入8个字',
           prop: 'courseName',
           label: '课程分类名称',
+          maxlength: 8,
           rules: [{ required: true, message: '请输入课程分类名称' }]
         },
         {
           type: 'radio',
           prop: 'courseType',
           label: '课程类型',
+          disabled: false,
           opts: [{ label: '一对一', value: 'one' }, { label: '一对多', value: 'more' }],
           rules: [{ required: true, message: '课程分类名称' }],
           func: (val) => vm.handleToggleCourseType(val)
@@ -104,7 +106,7 @@ export default {
       this.listLoading = true
       const params = { page: { pageNum: this.pageIndex, pageSize: this.pageSize }}
       try {
-        const res = await CourseModel.getCourseList(params)
+        const res = await CourseModel.getList(params)
         console.log(res)
         const { totalSize, data } = res.data
         const result = totalSize > 0 ? data : []
@@ -116,11 +118,13 @@ export default {
     },
     handleAdd() {
       this.dialogForms.find(item => item.prop === 'num').hidden = true
+      this.dialogForms.find(item => item.prop === 'courseType').disabled = false
       this.$refs.dialogForm.open({ courseType: 'one' })
     },
     handleEdit(item) {
       console.log(item)
       const { courseType } = item
+      this.dialogForms.find(item => item.prop === 'courseType').disabled = true
       this.handleToggleCourseType(courseType)
       this.$refs.dialogForm.open(item)
     },
@@ -134,7 +138,7 @@ export default {
       const { active, ...rest } = item
       try {
         this.loading = true
-        await CourseModel.updateCourseActive({ data: { active: !active, ...rest }})
+        await CourseModel.updateActive({ data: { active: !active, ...rest }})
         this.$message.success(`${active ? '关闭' : '开启'}成功`)
         await this.handleSearch()
       } finally {

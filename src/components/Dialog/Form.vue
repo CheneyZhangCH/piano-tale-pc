@@ -27,7 +27,18 @@
     <slot name="customTip" />
     <main class="main" :class="{ 'max-height': maxHeight, 'insert-tip-warning': insertTipWarning }">
       <slot name="custom" />
-      <aika-form ref="form" :is-dialog="true" :disabled="disabled" :initial-values="initialValues" :rules="rules" :forms="forms" :label-width="labelWidth" :span-count="spanCount" :hide-required-asterisk="hideRequiredAsterisk" @preview="url => {$emit('preview',url)}">
+      <aika-form
+        ref="form"
+        :is-dialog="true"
+        :disabled="disabled"
+        :initial-values="initialValues"
+        :rules="rules"
+        :forms="forms"
+        :label-width="labelWidth"
+        :span-count="spanCount"
+        :hide-required-asterisk="hideRequiredAsterisk"
+        @preview="url => {$emit('preview',url)}"
+      >
         <template #custom>
           <slot name="form-custom" />
         </template>
@@ -42,9 +53,11 @@
         <slot v-if="footerConfig.operate && footerConfig.operate.show" name="btngroup" />
         <el-button v-if="!hideOperate" size="small" @click="handleOperate">{{ footerConfig.operate && footerConfig.operate.label }}</el-button>
         <slot v-if="footerConfig.cancel.show" name="btngroup" />
-        <el-button v-if="!hideCancel" size="small" @click="handleClose">{{ footerConfig.cancel.label }}</el-button>
+        <el-button v-if="!hideCancel" size="small" @click="handleClose">{{ cancelButtonText || footerConfig.cancel.label }}</el-button>
         <slot v-if="footerConfig.submit.show" name="btngroup-center" />
-        <el-button v-if="!hideConfirm" size="small" :loading="loading" type="primary" @click="handleConfirm">{{ footerConfig.submit.label }}</el-button>
+        <el-button v-if="!hideConfirm" size="small" :loading="loading" type="primary" @click="handleConfirm">
+          {{ confirmButtonText || footerConfig.submit.label }}
+        </el-button>
         <slot name="btngroup-after" />
       </div>
     </template>
@@ -55,22 +68,10 @@
 export default {
   name: 'Form',
   props: {
-    title: {
-      type: String,
-      default: '系统提示'
-    },
-    width: {
-      type: String,
-      default: '360px'
-    },
-    labelWidth: {
-      type: String,
-      default: '92px'
-    },
-    top: {
-      type: String,
-      default: '15vh'
-    },
+    title: { type: String, default: '系统提示' },
+    width: { type: String, default: '360px' },
+    labelWidth: { type: String, default: '92px' },
+    top: { type: String, default: '15vh' },
     maxHeight: Boolean,
     insertTipWarning: { type: Boolean, default: false },
     disabled: Boolean,
@@ -79,52 +80,27 @@ export default {
     rules: Object,
     hideRequiredAsterisk: { type: Boolean, default: false },
     initialValues: { type: Object }, // 初始值
-    bottomRight: {
-      type: Boolean,
-      default: false
-    },
-    bodyNoPadding: {
-      type: Boolean,
-      default: false
-    },
+    bottomRight: { type: Boolean, default: false },
+    bodyNoPadding: { type: Boolean, default: false },
     footerConfig: {
       type: Object,
       default: () => {
         return {
-          cancel: {
-            label: '取消',
-            show: true
-          },
-          submit: {
-            label: '确定',
-            show: true
-          }
+          cancel: { label: '取消', show: true },
+          submit: { label: '确定', show: true }
         }
       }
     },
+    confirmButtonText: { type: String, default: '' },
+    cancelButtonText: { type: String, default: '' },
     confirm: Boolean,
-    hideConfirm: {
-      type: Boolean,
-      default: false
-    },
-    lockScroll: {
-      type: Boolean,
-      default: true
-    },
-    hideCancel: {
-      type: Boolean,
-      default: false
-    },
-    showClose: {
-      type: Boolean,
-      default: true
-    },
+    hideConfirm: { type: Boolean, default: false },
+    lockScroll: { type: Boolean, default: true },
+    hideCancel: { type: Boolean, default: false },
+    showClose: { type: Boolean, default: true },
     modalAppendToBody: { type: Boolean, default: false },
     appendToBody: { type: Boolean, default: false },
-    hideOperate: {
-      type: Boolean,
-      default: true
-    }
+    hideOperate: { type: Boolean, default: true }
   },
   data() {
     return {
@@ -136,7 +112,9 @@ export default {
     open(obj) {
       this.loading = false
       this.visible = true
-      this.$nextTick(() => { this.$refs.form.init(obj) })
+      this.$nextTick(() => {
+        this.$refs.form.init(obj)
+      })
     },
     handleClose() {
       const done = () => {
@@ -149,7 +127,8 @@ export default {
           .then(_ => {
             done()
           })
-          .catch(_ => {})
+          .catch(_ => {
+          })
           .finally(() => {
             this.isSuccess = false
           })
@@ -215,18 +194,21 @@ export default {
 
 <style lang="scss" scoped>
 .max-height {
-    max-height: 400px;
-    overflow-y: auto;
+  max-height: 400px;
+  overflow-y: auto;
 }
+
 ::v-deep.el-form-item:not(.is-required) > .el-form-item__label {
-    padding-left: 9px;
+  padding-left: 9px;
 }
+
 .insert-tip-warning {
-    margin-top: 20px;
+  margin-top: 20px;
 }
+
 .aika-dialog-form {
   ::v-deep .el-dialog__body {
-        position: relative;
-    }
+    position: relative;
+  }
 }
 </style>

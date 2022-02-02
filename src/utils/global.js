@@ -52,5 +52,11 @@ export default {
     Vue.prototype.$setFormDict = function(form, prop, dict) {
       form.find(item => item.prop === prop).opts = dict
     }
+
+    // 打开新页面
+    Vue.prototype.$goToNewBlank = function(vm, routeParams) {
+      const routeUrl = vm.$router.resolve(routeParams)
+      window.open(routeUrl.href, '_blank')
+    }
   }
 }
