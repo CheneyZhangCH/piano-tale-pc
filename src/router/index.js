@@ -231,6 +231,7 @@ export const asyncRoutes = [
       }
     ]
   },
+
   {
     path: '/timetable',
     component: Layout,
@@ -240,6 +241,19 @@ export const asyncRoutes = [
         component: () => import('@/views/timetable/index'),
         name: 'package',
         meta: { title: '课表管理', noCache: true }
+      }
+    ]
+  },
+
+  {
+    path: '/account',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/account/index'),
+        name: 'package',
+        meta: { title: '账号管理', noCache: true }
       }
     ]
   },

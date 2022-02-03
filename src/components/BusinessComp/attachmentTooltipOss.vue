@@ -59,7 +59,7 @@
       </el-tooltip>
       <div v-else class="file-container single-file">
         <ul class="file-wrap">
-          <el-tooltip v-for="(file,index) in attachmentList" :key="file.affixUuid" placement="top-start">
+          <el-tooltip v-for="(file,index) in attachmentList" :key="file.fileName + index" placement="top-start">
             <template #content>
               <div>{{ file.meta.indexOf('image') > -1 || /\.HEIC$/ig.test(file.fileUrl) ? '预览' : '下载' }}</div>
             </template>

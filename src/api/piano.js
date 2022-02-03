@@ -17,6 +17,10 @@ export const CourseModel = {
   // 切换课程状态
   updateActive(data) {
     return post(`/manager/course/updateActive`, data)
+  },
+  // 获取启用状态的课程列表
+  listActive() {
+    return get(`/manager/course/listActive`)
   }
 }
 
@@ -115,5 +119,37 @@ export const TimetableModel = {
   // 获取详情
   detail(data) {
     return post(`/manager/courseTimetable/getCourseTimetable`, data)
+  }
+}
+
+/** ------------------------ 账号接口 -------------------------**/
+export const AccountModel = {
+  // 获取列表
+  getList(data) {
+    return post(`manager/userAccount/page`, data)
+  },
+  // 新增非老师
+  add(data) {
+    return post(`/manager/userAccount/saveAccount`, data)
+  },
+  // 新增老师
+  addTeacher(data) {
+    return post(`/manager/userAccount/saveTeacherAccount`, data)
+  },
+  // 修改
+  update(data) {
+    return post(`/manager/userAccount/updateAccount`, data)
+  },
+  // 修改
+  updateTeacher(data) {
+    return post(`/manager/userAccount/updateTeacherAccount`, data)
+  },
+  // 切换状态
+  updateActive(data) {
+    return post(`/manager/userAccount/updateActive`, data)
+  },
+  // 获取详情
+  getTeacherDetail(data) {
+    return post(`/manager/userAccount/getTeacherAccount`, data)
   }
 }

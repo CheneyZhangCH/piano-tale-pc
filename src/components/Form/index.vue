@@ -404,22 +404,14 @@ export default {
               const customRules = forms[i].customRules
               for (let j = 0; j < customRules.length; j++) {
                 const rule = customRules[j]
-                if (
-                  rule.type === 'max' &&
-                                    !this.$isNullOrEmpty(_form[rule.being]) &&
-                                    +_form[forms[i].prop] > +_form[rule.being]
-                ) {
+                if (rule.type === 'max' && !this.$isNullOrEmpty(_form[rule.being]) && +_form[forms[i].prop] > +_form[rule.being]) {
                   _valid = false
                   errorMsg = rule.errorMsg
                   errField = forms[i]
 
                   breakFori = true
                   break
-                } else if (
-                  rule.type === 'min' &&
-                                    !this.$isNullOrEmpty(_form[rule.being]) &&
-                                    +_form[forms[i].prop] < +_form[rule.being]
-                ) {
+                } else if (rule.type === 'min' && !this.$isNullOrEmpty(_form[rule.being]) && +_form[forms[i].prop] < +_form[rule.being]) {
                   _valid = false
                   errorMsg = rule.errorMsg
                   errField = forms[i]

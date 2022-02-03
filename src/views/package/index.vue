@@ -359,7 +359,6 @@ export default {
     },
     handleRemoveCourse(index) {
       console.log('index', index)
-      debugger
       const courses = this.dialogForm.filter(item => item.prop.startsWith('courseId'))
       if (courses.length <= 1) {
         return this.$message.warning('课程分类不能少于1条')
@@ -376,7 +375,6 @@ export default {
     },
     handleRemoveBook(index) {
       console.log('index', index)
-      debugger
       const books = this.dialogForm.filter(item => item.prop.startsWith('bookId'))
       if (books.length <= 1) {
         return this.$message.warning('教材不能少于1条')
