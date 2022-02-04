@@ -1,6 +1,5 @@
 import router from './router'
 import store from './store'
-import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
@@ -26,6 +25,9 @@ router.beforeEach(async(to, from, next) => {
       next({ path: '/' })
       NProgress.done() // hack: https://github.com/PanJiaChen/vue-element-admin/pull/2939
     } else {
+      if (!store.getters.phone) {
+        await store.dispatch('user/setUserInfo')
+      }
       const permission_routes = store.getters && store.getters.permission_routes
       if (!Array.isArray(permission_routes) || permission_routes.length === 0) {
       // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']

@@ -37,7 +37,7 @@
 
 <script>
 import paginationMixin from '@/components/Table/mixin'
-import { AccountModel, BookModel, CourseModel, PackageModel, TimetableModel } from '@/api/piano'
+import { AccountModel, CourseModel, PackageModel, TimetableModel } from '@/api/piano'
 import { mapState } from 'vuex'
 import { deepClone } from '@/utils'
 import uploadMixin from '@/mixins/upload'
@@ -201,7 +201,6 @@ export default {
   },
   computed: {
     ...mapState({
-      roles: state => state.user.roles
     }),
     btnText() {
       return `新增${this.activeMap[this.activeName]}账号`
@@ -218,7 +217,7 @@ export default {
       this.courseList.forEach(d => { this.courseListObj[d.id] = d.courseName })
 
       const packageRes = await PackageModel.getListActive()
-      this.packageList = (packageRes.data|| []).map(d => ({ label: d.packageName, value: d.id, ...d })) || []
+      this.packageList = (packageRes.data || []).map(d => ({ label: d.packageName, value: d.id, ...d })) || []
       this.packageList.forEach(d => { this.packageListObj[d.id] = d.packageName })
 
       const timetableRes = await TimetableModel.getListActive()
@@ -268,7 +267,9 @@ export default {
     },
     async handleEdit(item) {
       this.latestCourse = 1
-      if (!this.roles.includes('SUPER_ADMIN') && !this.roles.includes('super_admin') && item.accountType === 'SUPER_ADMIN') {
+      const _accountType = this.$store.getters.accountType
+      if (_accountType !== 'SUPER_ADMIN' && item.accountType === 'SUPER_ADMIN') {
+        debugger
         return this.$message.warning('只有超级管理员可以修改超级管理员账号')
       }
 
@@ -319,7 +320,9 @@ export default {
     },
     async handleToggleActive(item) {
       console.log(item)
-      if (item.accountType === 'SUPER_ADMIN') return
+      if (item.accountType === 'SUPER_ADMIN') {
+        return this.$message.warning('超级管理员账号不能关闭')
+      }
       if (this.activeName === 'TEACHER') {
         await this.$confirm('账号被关闭后将不能再登录系统，课表将被释放，并从分组内退出，是否确定？', '提示', {
           type: 'warning'
@@ -327,7 +330,7 @@ export default {
       }
 
       if (this.loading) return
-      const { active, ...rest } = item
+      const { active } = item
       try {
         this.loading = true
         await AccountModel.updateActive({ data: item.id })
@@ -366,9 +369,11 @@ export default {
       try {
         this.loading = true
         if (this.activeName !== 'TEACHER') {
-          const res = form.id
-            ? await AccountModel.update({ data: { accountType: this.activeName, id: form.id, phone: form.phone }})
-            : await AccountModel.add({ data: { accountType: this.activeName, id: form.id, phone: form.phone }})
+          if (form.id) {
+            await AccountModel.update({ data: { accountType: this.activeName, id: form.id, phone: form.phone }})
+          } else {
+            await AccountModel.add({ data: { accountType: this.activeName, id: form.id, phone: form.phone }})
+          }
         } else {
           const { id, coverUrl, phone, salary, teacherName, timetableId, packageId } = form
           const teacher = { accountId: id, phone, salary, teacherName, timetableId, coverUrl: coverUrl[0].fileUrl }
