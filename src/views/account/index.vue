@@ -217,12 +217,12 @@ export default {
       this.courseList = (courseRes.data || []).map(d => ({ label: d.courseName, value: d.id, ...d })) || []
       this.courseList.forEach(d => { this.courseListObj[d.id] = d.courseName })
 
-      const packageRes = await PackageModel.getList({ page: { pageNum: 1, pageSize: 999 }})
-      this.packageList = (packageRes.data.data || []).map(d => ({ label: d.packageName, value: d.id, ...d })) || []
+      const packageRes = await PackageModel.getListActive()
+      this.packageList = (packageRes.data|| []).map(d => ({ label: d.packageName, value: d.id, ...d })) || []
       this.packageList.forEach(d => { this.packageListObj[d.id] = d.packageName })
 
-      const timetableRes = await TimetableModel.getList({ page: { pageNum: 1, pageSize: 999 }})
-      this.timetableList = (timetableRes.data.data || []).map(d => ({ label: d.timetableName, value: d.id, ...d })) || []
+      const timetableRes = await TimetableModel.getListActive()
+      this.timetableList = (timetableRes.data || []).map(d => ({ label: d.timetableName, value: d.id, ...d })) || []
       this.timetableList.forEach(d => { this.timetableListObj[d.id] = d.timetableName })
       console.log('this.courseList', this.courseList)
       console.log('this.packageList', this.packageList)
@@ -292,6 +292,7 @@ export default {
           })
           this.dialogForms.push(..._course)
         })
+        this.latestCourse += courses.length
         console.log('this.dialogForms', this.dialogForms)
         console.log('courseForm', courseForm)
         this.$refs.dialogForm.open({
@@ -315,10 +316,6 @@ export default {
         fileName,
         contentType: type
       }]
-    },
-    handleToggleCourseType(val) {
-      console.log(val)
-      this.dialogForms.find(item => item.prop === 'num').hidden = val === 'one'
     },
     async handleToggleActive(item) {
       console.log(item)

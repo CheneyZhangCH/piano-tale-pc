@@ -52,7 +52,7 @@ export default {
           fixed: 'right',
           width: '100px',
           list: [
-            { func: vm.handleEdit, formatter(row) { return { type: 'text', label: '修改', disabled: !row.active  } } },
+            { func: vm.handleEdit, formatter(row) { return { type: 'text', label: '修改', disabled: !row.active } } },
             { func: vm.handleToggleActive, formatter(row) { return { type: 'text', label: row.active ? '关闭' : '开启' } } }
           ]
         }
@@ -259,6 +259,7 @@ export default {
         courseForm[course[1].prop] = c.num
         this.dialogForm.splice(this.dialogForm.length - 1, 0, ...course)
       })
+      this.latestCourse += courses.length
       const bookForm = {}
       books.forEach((c, index) => {
         const book = deepClone(this.book)
@@ -266,6 +267,7 @@ export default {
         bookForm[book.prop] = c.bookId
         this.dialogForm.splice(this.dialogForm.length - 1, 0, book)
       })
+      this.latestBook += books.length
 
       console.log(this.dialogForm)
       console.log(courseForm)
@@ -309,7 +311,7 @@ export default {
           return this.$message.warning('最多只能选择一个一对一课程')
         }
         const courseIds = Array.from(new Set(courses.map(c => c.courseId))) || []
-        const bookIds = Array.from(new Set(books.map(c => c.bookId ))) || []
+        const bookIds = Array.from(new Set(books.map(c => c.bookId))) || []
         console.log('books', books)
         console.log('courses', courses)
         // debugger

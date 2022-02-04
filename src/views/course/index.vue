@@ -66,6 +66,7 @@ export default {
           placeholder: '最多输入8个字',
           prop: 'courseName',
           label: '课程分类名称',
+          labelWidth: '120px',
           maxlength: 8,
           rules: [{ required: true, message: '请输入课程分类名称' }]
         },
@@ -73,6 +74,7 @@ export default {
           type: 'radio',
           prop: 'courseType',
           label: '课程类型',
+          labelWidth: '120px',
           disabled: false,
           opts: [{ label: '一对一', value: 'one' }, { label: '一对多', value: 'more' }],
           rules: [{ required: true, message: '课程分类名称' }],
@@ -85,6 +87,7 @@ export default {
           prop: 'num',
           rules: [{ required: true, message: '人数上限必填' }],
           label: '人数上限',
+          labelWidth: '120px',
           min: 1,
           max: 99,
           precision: 0

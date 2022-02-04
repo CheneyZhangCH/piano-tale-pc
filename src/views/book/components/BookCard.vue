@@ -46,7 +46,7 @@ export default {
 .el-card {
   width: 375px;
   margin-bottom: 16px;
-  margin-right: 16px;
+  margin-right: 8px;
 }
 .top {
   display: flex;
