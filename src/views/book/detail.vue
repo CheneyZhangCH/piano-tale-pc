@@ -359,7 +359,7 @@ export default {
       }
     },
     handleEditBook() {
-      this.$refs.bookDialogForm.open({ bookName: this.book.bookName, coverUrl: this._convertUrl2Files(this.book.coverUrl) })
+      this.$refs.bookDialogForm.open({ id: this.book.id, bookName: this.book.bookName, coverUrl: this._convertUrl2Files(this.book.coverUrl) })
     },
     // handleToggleCourseType(val) {
     //   console.log(val)
@@ -383,16 +383,16 @@ export default {
     // },
     async handleBookDialogFormConfirm(form) {
       console.log(form)
-      const { bookName, coverUrl } = form
+      const { bookName, coverUrl, id } = form
       if (this.loading) return
       try {
         this.loading = true
-        await BookModel.updateBook({ data: { bookName, coverUrl: coverUrl[0].url, active: true }})
+        await BookModel.updateBook({ data: { id, bookName, coverUrl: coverUrl[0].url, active: true }})
         this.$message.success(`修改成功`)
-        this.$refs.dialogForm.close()
+        this.$refs.bookDialogForm.close()
         await this.initPage()
       } finally {
-        this.$refs.dialogForm.stopLoading()
+        this.$refs.bookDialogForm.stopLoading()
         this.loading = false
       }
     },
