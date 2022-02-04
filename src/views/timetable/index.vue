@@ -32,7 +32,7 @@
 
 <script>
 import paginationMixin from '@/components/Table/mixin'
-import { BookModel, CourseModel, PackageModel, TimetableModel } from '@/api/piano'
+import { PackageModel, TimetableModel } from '@/api/piano'
 import { deepClone } from '@/utils'
 
 export default {
@@ -51,7 +51,7 @@ export default {
           width: '100px',
           list: [
             { func: vm.handleEdit, formatter(row) { return { type: 'text', label: '修改', disabled: true } } },
-            { func: vm.handleToggleActive, formatter(row) { return { type: 'text', label: row.active ? '关闭' : '开启' } } }
+            { func: vm.handleToggleActive, formatter(row) { return { type: 'text', label: row.active ? '关闭' : '开启', disabled: true } } }
           ]
         }
       ],
@@ -248,7 +248,6 @@ export default {
       this.$refs.dialogForm.open({})
     },
     async handleEdit(item, index) {
-      return
       this.latestBook = 1
       this.latestCourse = 1
 
@@ -289,7 +288,7 @@ export default {
         const { timetableName, id } = form
 
         const periods = []
-        const period = { dayOfWeek: 0, id: 0, periodName: '', periodType: '', studentNum: '', timetableId: 0 }
+        // const period = { dayOfWeek: 0, id: 0, periodName: '', periodType: '', studentNum: '', timetableId: 0 }
         const index2 = this.dialogForm.findIndex(item => item.prop === '2')
         const index3 = this.dialogForm.findIndex(item => item.prop === '3')
         const index4 = this.dialogForm.findIndex(item => item.prop === '4')
