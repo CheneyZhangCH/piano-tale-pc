@@ -249,6 +249,10 @@ export default {
         teacherForm.forEach(formItem => {
           if (formItem.prop === 'teacherRatio') {
             teacherForms[formItem.prop + (index + 1)] = teacher.ratio
+          } else if (formItem.prop === 'teacherId') {
+            if (this.teacherList.find(t => t.value === teacher.teacherId)) {
+              teacherForms[formItem.prop + (index + 1)] = teacher.ratio
+            }
           } else {
             teacherForms[formItem.prop + (index + 1)] = teacher[formItem.prop]
           }
