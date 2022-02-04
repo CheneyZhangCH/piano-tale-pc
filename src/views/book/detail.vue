@@ -130,8 +130,8 @@ export default {
           accept: 'image/jpeg, image/jpg, image/png, image/HEIC',
           exceedTips: '附件最多可上传1张！',
           limit: 1,
-          success: (file) => vm.handleAddUploadFile(file, 'dialogForm', 'coverUrl', true),
-          del: (file, index) => vm.handleDeleteUploadedFile(file, index, 'dialogForm', 'coverUrl', true)
+          success: (file) => vm.handleAddUploadFile(file, 'bookDialogForm', 'coverUrl', true),
+          del: (file, index) => vm.handleDeleteUploadedFile(file, index, 'bookDialogForm', 'coverUrl', true)
         }
       ],
       loading: false,
@@ -462,7 +462,11 @@ export default {
         videos: videos.map(item => ({ videoName: item.fileName, videoUrl: item.fileUrl, chapterId, id: item.id }))
       }
       try {
-        const res = chapterId ? await BookModel.updateChapter({ data: params }) : await BookModel.addChapter({ data: params })
+        if (chapterId) {
+          await BookModel.updateChapter({ data: params })
+        } else {
+          await BookModel.addChapter({ data: params })
+        }
         this.$message.success(`${chapterId ? '修改' : '新增'}成功`)
         this.$refs.chapterDialogForm.stopLoading()
         this.$refs.chapterDialogForm.close()

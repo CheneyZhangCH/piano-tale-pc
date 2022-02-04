@@ -1,10 +1,10 @@
-import { login, logout, getInfo, LoginModel } from '@/api/user'
+import { getInfo, LoginModel } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
-  phone: '18521563197',
+  phone: '',
   accountType: '',
   roles: ['admin']
 }
