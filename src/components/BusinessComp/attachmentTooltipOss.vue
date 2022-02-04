@@ -97,7 +97,6 @@ import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 // import { getOssThumb } from '@/utils/ossImage'
 import { QiniuModel } from '@/api/qiniu'
 import * as qiniu from 'qiniu-js'
-import Vue from 'vue'
 export default {
   name: 'AttachmentTooltip',
   components: {
@@ -165,7 +164,7 @@ export default {
 
     beforeUpload(file) {
       const { maxSize, accept, acceptTip } = this.item
-      const _maxSize = Object.prototype.toString.call(maxSize) === '[object Number]' ? maxSize : 20
+      const _maxSize = Object.prototype.toString.call(maxSize) === '[object Number]' ? maxSize : 100
       const overSizeLimit = file.size / 1024 / 1024 > _maxSize
       if (overSizeLimit) {
         this.$message.error(`文件大小不能超过${_maxSize}M！`)
@@ -204,7 +203,7 @@ export default {
       const loading = this.$loading({ lock: true, text: '上传中', spinner: 'el-icon-loading', background: 'rgba(0, 0, 0, 0.5)' })
       try {
         const observable = qiniu.upload(file, (folder ? folder + '/' : '') + name, token)
-        const subscription = observable.subscribe(
+        observable.subscribe(
           (res) => {
             console.log('next', res)
           },
@@ -215,6 +214,8 @@ export default {
           (res) => {
             console.log('complete', res)
             const { key, hash } = res
+            const nameArr = name.split('.')
+            const fileLastName = nameArr[nameArr.length - 1]
             const contentType = type || (/\.heic$/ig.test(fileLastName) ? 'image/heic' : 'other')
             const qiniuHost = 'http://static.gangqintonghua.com/'
             this.item.success({
