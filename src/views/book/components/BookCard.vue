@@ -47,6 +47,15 @@ export default {
   width: 375px;
   margin-bottom: 16px;
   margin-right: 8px;
+  .el-card__body {
+    width: 100%;
+    .image {
+      width: 100%;
+      img {
+        width: 100%;
+      }
+    }
+  }
 }
 .top {
   display: flex;

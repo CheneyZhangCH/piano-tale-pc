@@ -127,6 +127,7 @@ export default {
           opts: [],
           span: 12,
           disabled: false,
+          func: (val, index) => vm.handleCourseChange(val, index),
           rules: [{ required: true, message: '请选择课程分类' }]
         },
         {
@@ -206,6 +207,7 @@ export default {
           labelWidth: '120px',
           maxlength: 30,
           disabled: false,
+          hidden: false,
           rules: [{ required: true, message: '请输入本课知识点' }]
         }
       ],
@@ -275,6 +277,10 @@ export default {
       })
       console.log('steps', steps)
       this.dialogForm.splice(5, 1, ...steps)
+
+      const course = this.courseList.find(c => c.value === item.courseId)
+      this.dialogForm[this.$findObj(this.dialogForm, 'knowledge')].hidden = course.courseType === 'one'
+
       this.$refs.dialogForm.open(item)
     },
     handleDeleteChapter(item, index) {
@@ -294,6 +300,11 @@ export default {
       }
       this.$refs.dialogForm.stopLoading()
       this.$refs.dialogForm.close()
+    },
+
+    handleCourseChange(val) {
+      const course = this.courseList.find(course => course.value === val)
+      this.dialogForm[this.$findObj(this.dialogForm, 'knowledge')].hidden = course.courseType === 'one'
     },
 
     handleAddStep() {

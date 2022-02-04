@@ -185,6 +185,7 @@ export default {
           opts: [],
           span: 12,
           disabled: false,
+          func: (val, index) => vm.handleCourseChange(val, index),
           rules: [{ required: true, message: '请选择课程分类' }]
         },
         {
@@ -199,7 +200,6 @@ export default {
           max: 99,
           disabled: false,
           precision: 0
-
         },
         {
           type: 'attachmentTooltipOss',
@@ -231,7 +231,7 @@ export default {
               type: 'operation', label: '操作', fixed: 'right',
               list: [
                 {
-                  func: (row, index) => vm.handleDeleteUploadedFile(row, index, 'dialogForm', 'videos', true),
+                  func: (row, index) => vm.handleDeleteUploadedFile(row, index, 'chapterDialogForm', 'videos', true),
                   formatter(row) { return { type: 'text', label: '删除' } }
                 }
               ]
@@ -264,6 +264,7 @@ export default {
           labelWidth: '120px',
           maxlength: 30,
           disabled: false,
+          hidden: false,
           rules: [{ required: true, message: '请输入本课知识点' }]
         }
       ],
@@ -429,6 +430,10 @@ export default {
       console.log(workStepData)
       console.log('steps', steps)
       this.chapterDialogForm.splice(5, 1, ...steps)
+
+      const course = this.courseList.find(c => c.value === chapter.courseId)
+      this.chapterDialogForm[this.$findObj(this.chapterDialogForm, 'knowledge')].hidden = course.courseType === 'one'
+
       this.$refs.chapterDialogForm.open({
         bookId: chapter.bookId,
         chapterName: chapter.chapterName,
@@ -474,6 +479,10 @@ export default {
       } catch (e) {
         this.$refs.chapterDialogForm.stopLoading()
       }
+    },
+    handleCourseChange(val) {
+      const course = this.courseList.find(course => course.value === val)
+      this.chapterDialogForm[this.$findObj(this.chapterDialogForm, 'knowledge')].hidden = course.courseType === 'one'
     },
 
     handleAddStep() {

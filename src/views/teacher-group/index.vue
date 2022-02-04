@@ -142,7 +142,7 @@ export default {
           opts: [],
           span: 7,
           disabled: false,
-          rules: [{ required: true, message: '请选择类型' }]
+          rules: [{ required: true, message: '请选择老师' }]
         },
         {
           type: 'input',
@@ -180,8 +180,8 @@ export default {
       this.packageList.forEach(d => { this.packageListObj[d.id] = d.packageName })
 
       const teacherRes = await AccountModel.getActiveTeacherList()
-      this.teacherList = (teacherRes.data || []).map(d => ({ label: d.teacherName, value: d.id, ...d })) || []
-      this.teacherList.forEach(d => { this.teacherListObj[d.id] = d.teacherName })
+      this.teacherList = (teacherRes.data || []).map(d => ({ label: d.teacherName, value: d.accountId, ...d })) || []
+      this.teacherList.forEach(d => { this.teacherListObj[d.accountId] = d.teacherName })
       console.log('this.packageList', this.packageList)
       console.log('this.timetableList', this.teacherList)
 
@@ -266,7 +266,7 @@ export default {
     async handleToggleActive(item) {
       console.log(item)
       if (this.loading) return
-      const { active, ...rest } = item
+      const { active } = item
       try {
         this.loading = true
         await TeacherGroupModel.updateActive({ data: item.id })
@@ -353,9 +353,11 @@ export default {
         })
         const params = { data: { groupName, id, coursePackages, teachers }}
         console.log('params', params)
-        const res = form.id
-          ? await TeacherGroupModel.update(params)
-          : await TeacherGroupModel.add(params)
+        if (form.id) {
+          await TeacherGroupModel.update(params)
+        } else {
+          await TeacherGroupModel.add(params)
+        }
         this.$message.success(`${form.id ? '修改' : '新增'}成功`)
         await this.handleSearch()
         this.$refs.dialogForm.close()
