@@ -99,7 +99,7 @@ export default {
       try {
         this.forms = []
         const res = await RuleModel.getList()
-        const data = res.data || [{}]
+        const data = Array.isArray(res.data) && res.data.length > 0 ? res.data : [{}]
         const form = {}
         data.forEach((item, index) => {
           const forms = deepClone(this.formsTemplate)
