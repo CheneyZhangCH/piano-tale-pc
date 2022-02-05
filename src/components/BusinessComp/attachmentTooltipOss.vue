@@ -217,7 +217,7 @@ export default {
             const nameArr = name.split('.')
             const fileLastName = nameArr[nameArr.length - 1]
             const contentType = type || (/\.heic$/ig.test(fileLastName) ? 'image/heic' : 'other')
-            const qiniuHost = 'http://static.gangqintonghua.com/'
+            const qiniuHost = 'https://static.gangqintonghua.com/'
             this.item.success({
               ...file,
               contentType,
