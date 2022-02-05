@@ -27,7 +27,7 @@ module.exports = {
     headers: { 'Access-Control-Allow-Origin': '*' },
     proxy: {
       '/api': {
-        target: 'http://piano.gangqintonghua.com/api',
+        target: 'https://piano.gangqintonghua.com/api',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''
