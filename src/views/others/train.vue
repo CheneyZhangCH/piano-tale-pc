@@ -32,9 +32,7 @@
 
 <script>
 import paginationMixin from '@/components/Table/mixin'
-import { AccountModel, BookModel, CourseModel, PackageModel, TeacherGroupModel, TimetableModel, TrainModel } from '@/api/piano'
-import { mapState } from 'vuex'
-import { deepClone } from '@/utils'
+import { TrainModel } from '@/api/piano'
 import uploadMixin from '@/mixins/upload'
 
 export default {
@@ -42,13 +40,6 @@ export default {
   mixins: [paginationMixin, uploadMixin],
   data() {
     const vm = this
-    const validatePhone = (rule, value, callback) => {
-      if (!/^(1[3-9])[0-9]{9}$/.test(value)) {
-        callback(new Error('请输入正确的手机号码'))
-      } else {
-        callback()
-      }
-    }
 
     const validatePrice = (rule, value, callback) => {
       if (!/(^10000$)|(^10000\.0$)|(^10000\.00$)|(^\d{1,4}(\.\d{1,2})?$)/.test(value)) {
@@ -83,7 +74,7 @@ export default {
             },
             {
               func: vm.handleToggleActive,
-              formatter(row) { return { type: 'text', label: row.active ? '关闭' : '开启', disabled: !row.active } }
+              formatter(row) { return { type: 'text', label: row.active ? '删除' : '恢复', disabled: !row.active } }
             }
           ]
         }
@@ -154,11 +145,11 @@ export default {
     async handleToggleActive(item) {
       console.log(item)
       if (this.loading) return
-      const { active, ...rest } = item
+      const { active } = item
       try {
         this.loading = true
         await TrainModel.updateActive({ data: item.id })
-        this.$message.success(`${active ? '关闭' : '开启'}成功`)
+        this.$message.success(`${active ? '删除' : '恢复'}成功`)
         await this.handleSearch()
       } finally {
         this.loading = false
@@ -169,9 +160,11 @@ export default {
       if (this.loading) return
       try {
         this.loading = true
-        const res = form.id
-          ? await TrainModel.update({ data: form })
-          : await TrainModel.add({ data: form })
+        if (form.id) {
+          await TrainModel.update({ data: form })
+        } else {
+          await TrainModel.add({ data: form })
+        }
         this.$message.success(`${form.id ? '修改' : '新增'}成功`)
         await this.handleSearch()
         this.$refs.dialogForm.close()

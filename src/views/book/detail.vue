@@ -90,7 +90,7 @@ export default {
       columns: [
         { label: '曲目名称', value: 'chapterName', formatter(row) { return row.chapter.chapterName } },
         { label: '曲目课程种类', value: 'courseId', formatter(row) { return vm.courseListObj[row.chapter.courseId] } },
-        { label: '排序', value: 'sortNo', formatter(row) { return row.chapter.chapterName } },
+        { label: '排序', value: 'sortNo', formatter(row) { return row.chapter.sortNo } },
         // { label: '状态', value: 'active', formatter(row) { return row.active ? '启用' : '禁用' } },
         {
           type: 'operation', label: '操作', fixed: 'right', list: [
@@ -207,7 +207,7 @@ export default {
           labelWidth: '120px',
           prop: 'videos',
           span: 24,
-          requiredSign: true,
+          // requiredSign: true,
           rules: [{ required: true, message: '请上传视频' }],
           add: true,
           multiple: true,
@@ -226,11 +226,15 @@ export default {
           label: '',
           labelWidth: '120px',
           columns: [
-            { label: '排序', value: 'sort', formatter(row, column, cellValue, index) { return index + 1 } },
+            { label: '排序', value: 'sortNo', formatter(row, column, cellValue, index) { return row.sortNo } },
             { label: '视频名称', value: 'fileName' },
             {
               type: 'operation', label: '操作', fixed: 'right',
               list: [
+                {
+                  func: (row, index) => vm.handleOpenSortNo(index),
+                  formatter(row) { return { type: 'text', label: '排序' } }
+                },
                 {
                   func: (row, index) => vm.handleDeleteUploadedFile(row, index, 'chapterDialogForm', 'videos', true),
                   formatter(row) { return { type: 'text', label: '删除' } }
@@ -448,11 +452,27 @@ export default {
           id: video.id,
           fileName: video.videoName,
           fileUrl: video.videoUrl,
+          sortNo: video.sortNo,
           meta: video.videoUrl.split('.').reverse()[0]
-        }))
+        })).sort((a, b) => a.sortNo - b.sortNo)
       })
     },
     handleViewChapter() {
+    },
+    async handleOpenSortNo(index) {
+      const res = await this.$prompt('输入正整数，数字越大，排序越靠后', '排序', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPlaceholder: '输入正整数，数字越大，排序越靠后',
+        inputPattern: /^\d+$/,
+        inputErrorMessage: '请输入正整数'
+      })
+      if (res.action === 'confirm') {
+        console.log(this.$refs.chapterDialogForm)
+        console.log(this.$refs.chapterDialogForm.$refs.form.form)
+        this.$set(this.$refs.chapterDialogForm.$refs.form.form.videos[index], 'sortNo', res.value)
+      }
+      console.log(res)
     },
     async handleChapterDialogFormConfirm(form) {
       console.log(form)
@@ -465,7 +485,7 @@ export default {
       })
       const params = {
         chapter: { bookId: +id, chapterName, id: chapterId, courseId, knowledge, sortNo, unitId, workStep },
-        videos: videos.map(item => ({ videoName: item.fileName, videoUrl: item.fileUrl, chapterId, id: item.id }))
+        videos: videos.map(item => ({ videoName: item.fileName, videoUrl: item.fileUrl, chapterId, id: item.id, sortNo: item.sortNo }))
       }
       try {
         if (chapterId) {

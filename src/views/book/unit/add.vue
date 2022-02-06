@@ -150,7 +150,7 @@ export default {
           labelWidth: '120px',
           prop: 'videos',
           span: 24,
-          requiredSign: true,
+          // requiredSign: true,
           rules: [{ required: true, message: '请上传视频' }],
           add: true,
           multiple: true,
@@ -169,11 +169,15 @@ export default {
           label: '',
           labelWidth: '120px',
           columns: [
-            { label: '排序', value: 'sort', formatter(row, column, cellValue, index) { return index + 1 } },
+            { label: '排序', value: 'sort', formatter(row, column, cellValue, index) { return row.sortNo } },
             { label: '视频名称', value: 'fileName' },
             {
               type: 'operation', label: '操作', fixed: 'right',
               list: [
+                {
+                  func: (row, index) => vm.handleOpenSortNo(index),
+                  formatter(row) { return { type: 'text', label: '排序' } }
+                },
                 {
                   func: (row, index) => vm.handleDeleteUploadedFile(row, index, 'dialogForm', 'videos', true),
                   formatter(row) { return { type: 'text', label: '删除' } }
@@ -290,6 +294,19 @@ export default {
     handleViewChapter() {
 
     },
+    async handleOpenSortNo(index) {
+      const res = await this.$prompt('输入正整数，数字越大，排序越靠后', '排序', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPlaceholder: '输入正整数，数字越大，排序越靠后',
+        inputPattern: /^\d+$/,
+        inputErrorMessage: '请输入正整数'
+      })
+      if (res.action === 'confirm') {
+        this.$set(this.$refs.dialogForm.$refs.form.form.videos[index], 'sortNo', res.value)
+      }
+      console.log(res)
+    },
     async handleDialogFormConfirm(form) {
       console.log(form)
       const _form = deepClone(form)
@@ -350,7 +367,7 @@ export default {
         })
         return {
           chapter: { bookId, chapterName, courseId, knowledge, sortNo, workStep },
-          videos: videos.map(item => ({ videoName: item.fileName, videoUrl: item.fileUrl }))
+          videos: videos.map(item => ({ videoName: item.fileName, videoUrl: item.fileUrl, sortNo: item.sortNo }))
         }
       })
       const params = { data: { chapters, unit }}

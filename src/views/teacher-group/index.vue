@@ -65,7 +65,7 @@ export default {
             },
             {
               func: vm.handleToggleActive,
-              formatter(row) { return { type: 'text', label: row.active ? '关闭' : '开启', disabled: !row.active } }
+              formatter(row) { return { type: 'text', label: row.active ? '删除' : '恢复', disabled: !row.active } }
             }
           ]
         }
@@ -212,7 +212,7 @@ export default {
       this.dialogForms.push(deepClone(this.subTitle1), ...packageForm)
       const teacherForm = deepClone(this.teacherForm)
       teacherForm.forEach(item => { item.prop = item.prop + this.latestTeacher })
-      this.dialogForms.push(deepClone(this.subTitle1), ...teacherForm)
+      this.dialogForms.push(deepClone(this.subTitle2), ...teacherForm)
       console.log('this.dialogForms', this.dialogForms)
       this.$refs.dialogForm.open({ })
     },
@@ -274,7 +274,7 @@ export default {
       try {
         this.loading = true
         await TeacherGroupModel.updateActive({ data: item.id })
-        this.$message.success(`${active ? '关闭' : '开启'}成功`)
+        this.$message.success(`${active ? '删除' : '恢复'}成功`)
         await this.handleSearch()
       } finally {
         this.loading = false

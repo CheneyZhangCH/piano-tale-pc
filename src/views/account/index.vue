@@ -76,7 +76,7 @@ export default {
             },
             {
               func: vm.handleToggleActive,
-              formatter(row) { return { type: 'text', label: row.active ? '关闭' : '开启', disabled: !row.active } }
+              formatter(row) { return { type: 'text', label: row.active ? '删除' : '恢复', disabled: !row.active } }
             }
           ]
         }
@@ -321,10 +321,10 @@ export default {
     async handleToggleActive(item) {
       console.log(item)
       if (item.accountType === 'SUPER_ADMIN') {
-        return this.$message.warning('超级管理员账号不能关闭')
+        return this.$message.warning('超级管理员账号不能删除')
       }
       if (this.activeName === 'TEACHER') {
-        await this.$confirm('账号被关闭后将不能再登录系统，课表将被释放，并从分组内退出，是否确定？', '提示', {
+        await this.$confirm('账号被删除后将不能再登录系统，课表将被释放，并从分组内退出，是否确定？', '提示', {
           type: 'warning'
         })
       }
@@ -334,7 +334,7 @@ export default {
       try {
         this.loading = true
         await AccountModel.updateActive({ data: item.id })
-        this.$message.success(`${active ? '关闭' : '开启'}成功`)
+        this.$message.success(`${active ? '删除' : '恢复'}成功`)
         await this.handleSearch()
       } finally {
         this.loading = false

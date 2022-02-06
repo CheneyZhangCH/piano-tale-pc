@@ -46,6 +46,7 @@ export default {
         { label: '关联教材', value: 'books', width: '300px' },
         { label: '课程包有效期', value: 'expiryMonths', width: '120px', formatter(row) { return row.expiryMonths ? row.expiryMonths + '月' : '-' } },
         { label: '状态', value: 'active', formatter(row) { return row.active ? '启用' : '禁用' } },
+        { label: '排序', value: 'sortNo' },
         {
           type: 'operation',
           label: '操作',
@@ -137,6 +138,20 @@ export default {
           disabled: false,
           precision: 0,
           appendDom: { text: '月' }
+        },
+        {
+          type: 'inputNumber',
+          placeholder: '请输入正整数',
+          prop: 'sortNo',
+          rules: [{ required: true, message: '请输入正整数' }],
+          label: '排序',
+          labelWidth: '120px',
+          span: 24,
+          min: 1,
+          max: 99999,
+          disabled: false,
+          precision: 0,
+          appendDom: { text: '数字越大，排序越靠后' }
         }
       ],
 
@@ -279,8 +294,8 @@ export default {
       if (this.loading) return
       try {
         this.loading = true
-        const { packageName, expiryMonths, id } = form
-        const coursePackage = { active: true, expiryMonths, id, packageName }
+        const { packageName, expiryMonths, id, sortNo } = form
+        const coursePackage = { active: true, expiryMonths, id, packageName, sortNo }
 
         const bookKeys = Object.keys(form).filter(key => /bookId/.test(key))
         const books = bookKeys.map(key => {
