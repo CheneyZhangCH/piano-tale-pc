@@ -189,7 +189,7 @@ export default {
         opts: [],
         span: 24,
         disabled: false,
-        rules: [{ required: true, message: '请选择教材' }],
+        // rules: [{ required: true, message: '请选择教材' }],
         appendDom: [
           { type: 'button', color: 'text', text: '添加', func: this.handleAddBook },
           { type: 'button', color: 'text', text: '删除', func: this.handleRemoveBook }
@@ -388,7 +388,7 @@ export default {
       this.latestBook += 1
       book.prop = book.prop + this.latestBook
       book.label = book.label + this.latestBook
-      this.dialogForm.splice(this.dialogForm.length - 1, 0, book)
+      this.dialogForm.splice(this.dialogForm.length - 2, 0, book)
     },
     handleRemoveBook(index) {
       console.log('index', index)

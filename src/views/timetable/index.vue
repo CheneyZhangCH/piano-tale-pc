@@ -20,7 +20,7 @@
 
     <aika-dialogForm
       ref="dialogForm"
-      width="930px"
+      width="1200px"
       :hide-required-asterisk="true"
       :title="dialogFormTitle"
       :forms="dialogForm"
@@ -32,7 +32,7 @@
 
 <script>
 import paginationMixin from '@/components/Table/mixin'
-import { PackageModel, TimetableModel } from '@/api/piano'
+import { CourseModel, PackageModel, TimetableModel } from '@/api/piano'
 import { deepClone } from '@/utils'
 
 export default {
@@ -61,8 +61,8 @@ export default {
 
       loading: false,
 
-      // courseList: [],
-      // courseListObj: {},
+      courseList: [],
+      courseListObj: {},
       // bookList: [],
       // bookListObj: {},
 
@@ -154,9 +154,9 @@ export default {
           label: '',
           labelWidth: '0px',
           maxlength: 20,
-          span: 9,
+          span: 10,
           disabled: false,
-          className: 'widthMedium',
+          className: 'widthMedium2',
           rules: [{ required: true, message: '请输入' }]
         },
         {
@@ -165,7 +165,7 @@ export default {
           label: '',
           labelWidth: '0px',
           opts: [{ label: '上课', value: 'work' }, { label: '休息', value: 'rest' }],
-          span: 7,
+          span: 6,
           rules: [{ required: true, message: '请选择' }],
           func: this.handlePeriodTypeChange,
           appendDom: [
@@ -174,23 +174,54 @@ export default {
           ]
         },
         {
-          type: 'inputNumber',
-          placeholder: '人数上限, 请输入正整数,最大99',
-          prop: 'studentNum',
-          rules: [{ required: true, message: '请输入学生人数' }],
+          type: 'select',
+          prop: 'courseType',
           label: '',
           labelWidth: '0px',
-          span: 8,
-          min: 1,
-          max: 99,
-          precision: 0,
+          disabled: false,
           hidden: true,
-          className: 'widthNormal',
+          span: 4,
+          opts: [{ label: '一对一', value: 'one' }, { label: '一对多', value: 'more' }],
+          rules: [{ required: true, message: '课程分类名称' }],
+          func: vm.handleToggleCourseType,
+          appendDom: [
+            { type: 'button', color: 'text', text: '添加', func: this.handleAddTimetable },
+            { type: 'button', color: 'text', text: '删除', func: this.handleRemoveTimetable }
+          ]
+        },
+        {
+          type: 'select',
+          prop: 'courseId',
+          label: '',
+          labelWidth: '0px',
+          opts: [],
+          span: 4,
+          disabled: false,
+          hidden: true,
+          rules: [{ required: true, message: '请选择课程分类' }],
           appendDom: [
             { type: 'button', color: 'text', text: '添加', func: this.handleAddTimetable },
             { type: 'button', color: 'text', text: '删除', func: this.handleRemoveTimetable }
           ]
         }
+        // {
+        //   type: 'inputNumber',
+        //   placeholder: '人数上限, 请输入正整数,最大99',
+        //   prop: 'studentNum',
+        //   rules: [{ required: true, message: '请输入学生人数' }],
+        //   label: '',
+        //   labelWidth: '0px',
+        //   span: 8,
+        //   min: 1,
+        //   max: 99,
+        //   precision: 0,
+        //   hidden: true,
+        //   className: 'widthNormal',
+        //   appendDom: [
+        //     { type: 'button', color: 'text', text: '添加', func: this.handleAddTimetable },
+        //     { type: 'button', color: 'text', text: '删除', func: this.handleRemoveTimetable }
+        //   ]
+        // }
       ],
       appendDom: [
         { type: 'button', color: 'text', text: '添加', func: this.handleAddTimetable },
@@ -199,9 +230,16 @@ export default {
     }
   },
   mounted() {
+    this.initOptions()
     this.handleSearch()
   },
   methods: {
+    async initOptions() {
+      const courseRes = await CourseModel.listActive()
+      this.courseList = (courseRes.data || []).map(d => ({ label: d.courseName, value: d.id, ...d })) || []
+      this.courseList.forEach(d => { this.courseListObj[d.id] = d.courseName })
+      this.timetable[this.$findObj(this.timetable, 'courseId')].opts = this.courseList
+    },
     // 查询 获取列表
     async handleSearch() {
       this.listLoading = true
@@ -282,28 +320,31 @@ export default {
     },
     async handleDialogFormConfirm(form) {
       console.log(form)
+      console.log(this.latestTimetable)
       if (this.loading) return
       try {
         this.loading = true
         const { timetableName, id } = form
 
         const periods = []
-        // const period = { dayOfWeek: 0, id: 0, periodName: '', periodType: '', studentNum: '', timetableId: 0 }
         const index2 = this.dialogForm.findIndex(item => item.prop === '2')
         const index3 = this.dialogForm.findIndex(item => item.prop === '3')
         const index4 = this.dialogForm.findIndex(item => item.prop === '4')
         const index5 = this.dialogForm.findIndex(item => item.prop === '5')
         const index6 = this.dialogForm.findIndex(item => item.prop === '6')
         const index7 = this.dialogForm.findIndex(item => item.prop === '7')
-        for (let i = 0; i < this.latestTimetable; i++) {
+        for (let i = 0; i <= this.latestTimetable; i++) {
           const period = {
             dayOfWeek: 0,
             periodName: form[`periodName${i}`],
             periodType: form[`periodType${i}`],
-            studentNum: form[`studentNum${i}`],
+            courseType: form[`courseType${i}`],
+            courseId: form[`courseId${i}`],
+            // studentNum: form[`studentNum${i}`],
             timetableId: id
           }
           const _index = this.dialogForm.findIndex(item => item.prop === `periodName${i}`)
+          debugger
           if (_index && _index > index7) {
             period.dayOfWeek = 7
             periods.push(period)
@@ -348,7 +389,9 @@ export default {
         // }
 
         const params = { active: true, timetableName, id, periods }
+
         console.log('params', params)
+        debugger
 
         const res = form.id ? await TimetableModel.update({ data: params }) : await TimetableModel.add({ data: params })
         console.log(res)
@@ -365,25 +408,38 @@ export default {
       console.log('handlePeriodTypeChange val', val)
       console.log('handlePeriodTypeChange index', index)
       this.dialogForm[index].appendDom = val === 'work' ? undefined : this.appendDom
-      this.dialogForm[index].span = val === 'work' ? 6 : 8
+      this.dialogForm[index].span = val === 'work' ? 4 : 6
       this.dialogForm[index + 1].appendDom = val === 'work' ? this.appendDom : undefined
       this.dialogForm[index + 1].hidden = val !== 'work'
+      this.dialogForm[index + 1].span = val === 'work' ? 6 : 4
     },
+
+    handleToggleCourseType(val, index) {
+      console.log('handleToggleCourseType val', val)
+      console.log('handleToggleCourseType index', index)
+      this.dialogForm[index].appendDom = val === 'more' ? undefined : this.appendDom
+      this.dialogForm[index].span = val === 'more' ? 4 : 6
+      this.dialogForm[index + 1].appendDom = val === 'more' ? this.appendDom : undefined
+      this.dialogForm[index + 1].hidden = val !== 'more'
+      this.dialogForm[index + 1].span = val === 'more' ? 6 : 4
+    },
+
     handleAddTimetable(index, origin) {
       console.log('index', index)
       console.log('origin', origin)
       const items = deepClone(this.timetable)
       this.latestTimetable += 1
       items.forEach(item => { item.prop = item.prop + this.latestTimetable })
-      const _index = /periodType/ig.test(origin.prop) ? index + 2 : index + 1
+      const _index = index + (/periodType/.test(origin.prop) ? 3 : /courseType/ig.test(origin.prop) ? 2 : 1)
       this.dialogForm.splice(_index, 0, ...items)
       console.log(this.dialogForm)
     },
     handleRemoveTimetable(index, origin) {
       console.log('index', index)
       console.log('this.timetable', this.timetable)
-      const _index = /periodType/ig.test(origin.prop) ? index - 1 : index - 2
-      this.dialogForm.splice(_index, 3)
+      // const _index = /periodType/ig.test(origin.prop) ? index - 1 : index - 2
+      const _index = index - (/periodType/.test(origin.prop) ? 1 : /courseType/ig.test(origin.prop) ? 2 : 3)
+      this.dialogForm.splice(_index, 4)
     }
   }
 }
