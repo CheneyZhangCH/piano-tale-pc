@@ -276,7 +276,8 @@ export default {
       })
       this.latestCourse += courses.length
       const bookForm = {}
-      books.forEach((c, index) => {
+      const _books = !Array.isArray(books) || books.length === 0 ? [{}] : books
+      _books.forEach((c, index) => {
         const book = deepClone(this.book)
         book.prop = book.prop + (index + 1)
         bookForm[book.prop] = c.bookId
@@ -305,7 +306,7 @@ export default {
             // id: 0,
             packageId: id
           }
-        })
+        }).filter(book => book.bookId)
 
         const courseKeys = Object.keys(form).filter(key => /courseId/.test(key))
         const courses = courseKeys.map(key => {
