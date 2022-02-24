@@ -19,8 +19,8 @@ export const CourseModel = {
     return post(`/manager/course/updateActive`, data)
   },
   // 获取启用状态的课程列表
-  listActive() {
-    return get(`/manager/course/listActive`)
+  listActive(courseType) {
+    return get(`/manager/course/listActive?courseType=${courseType}`)
   }
 }
 

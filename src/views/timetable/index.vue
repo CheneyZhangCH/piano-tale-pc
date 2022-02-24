@@ -235,7 +235,7 @@ export default {
   },
   methods: {
     async initOptions() {
-      const courseRes = await CourseModel.listActive()
+      const courseRes = await CourseModel.listActive('more')
       this.courseList = (courseRes.data || []).map(d => ({ label: d.courseName, value: d.id, ...d })) || []
       this.courseList.forEach(d => { this.courseListObj[d.id] = d.courseName })
       this.timetable[this.$findObj(this.timetable, 'courseId')].opts = this.courseList
