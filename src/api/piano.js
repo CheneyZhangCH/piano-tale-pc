@@ -20,7 +20,7 @@ export const CourseModel = {
   },
   // 获取启用状态的课程列表
   listActive(courseType) {
-    return get(`/manager/course/listActive?courseType=${courseType}`)
+    return get(`/manager/course/listActive${courseType ? '?courseType=' + courseType : ''}`)
   }
 }
 
