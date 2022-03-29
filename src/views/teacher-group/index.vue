@@ -20,7 +20,7 @@
 
     <aika-dialogForm
       ref="dialogForm"
-      width="760px"
+      width="960px"
       :hide-required-asterisk="true"
       :title="dialogFormTitle"
       :forms="dialogForms"
@@ -100,7 +100,7 @@ export default {
           label: '',
           labelWidth: '0px',
           opts: [],
-          span: 6,
+          span: 5,
           disabled: false,
           rules: [{ required: true, message: '请选择考核课程包' }]
         },
@@ -111,7 +111,7 @@ export default {
           rules: [{ validator: validatePercent }],
           label: '',
           labelWidth: '0px',
-          span: 14,
+          span: 15,
           hidden: false,
           className: 'widthSecondary',
           appendDom: [
@@ -129,7 +129,7 @@ export default {
           label: '',
           labelWidth: '0px',
           opts: [{ label: '组长', value: 'leader' }, { label: '组员', value: 'member' }],
-          span: 4,
+          span: 3,
           disabled: false,
           className: 'widthMini',
           rules: [{ required: true, message: '请选择类型' }]
@@ -140,20 +140,35 @@ export default {
           label: '',
           labelWidth: '0px',
           opts: [],
-          span: 7,
+          span: 4,
           disabled: false,
+          className: 'widthMinor',
           rules: [{ required: true, message: '请选择老师' }]
         },
         {
           type: 'input',
           placeholder: '输入分红占比，最大100，最多2位小数',
-          prop: 'teacherRatio',
+          prop: 'ratio',
           rules: [{ validator: validatePercent }],
-          label: '',
-          labelWidth: '0px',
-          span: 13,
+          label: '续课分成占比',
+          labelWidth: '96px',
+          span: 7,
           hidden: false,
-          className: 'widthSecondary',
+          className: 'widthMinor',
+          appendDom: [
+            { type: 'text', text: '%' }
+          ]
+        },
+        {
+          type: 'input',
+          placeholder: '输入退费承担占比',
+          prop: 'refundRatio',
+          rules: [{ validator: validatePercent }],
+          label: '退费承担占比',
+          labelWidth: '96px',
+          span: 9,
+          hidden: false,
+          className: 'widthMinor',
           appendDom: [
             { type: 'text', text: '%' },
             { type: 'button', color: 'text', text: '添加', func: this.handleAddTeacher },
@@ -247,8 +262,10 @@ export default {
       teachers.forEach((teacher, index) => {
         const teacherForm = deepClone(this.teacherForm)
         teacherForm.forEach(formItem => {
-          if (formItem.prop === 'teacherRatio') {
+          if (formItem.prop === 'ratio') {
             teacherForms[formItem.prop + (index + 1)] = teacher.ratio
+          } else if (formItem.prop === 'refundRatio') {
+            teacherForms[formItem.prop + (index + 1)] = teacher.refundRatio
           } else if (formItem.prop === 'teacherId') {
             if (this.teacherList.find(t => t.value === teacher.teacherId)) {
               teacherForms[formItem.prop + (index + 1)] = teacher[formItem.prop]
@@ -311,6 +328,7 @@ export default {
       forms[0].prop = forms[0].prop + this.latestTeacher
       forms[1].prop = forms[1].prop + this.latestTeacher
       forms[2].prop = forms[2].prop + this.latestTeacher
+      forms[3].prop = forms[3].prop + this.latestTeacher
       this.dialogForms.splice(index + 1, 0, ...forms)
       console.log('this.dialogForm', this.dialogForms)
     },
@@ -320,7 +338,7 @@ export default {
       if (items.length <= 1) {
         return this.$message.warning('老师不能少于1条')
       }
-      this.dialogForms.splice(index - 2, 3)
+      this.dialogForms.splice(index - 3, 4)
       console.log('this.dialogForm', this.dialogForms)
     },
     async handleDialogFormConfirm(form) {
@@ -351,12 +369,14 @@ export default {
             teacherId: form[key],
             // id: 0,
             // teacherName: '',
-            ratio: +form[`teacherRatio${_index}`],
+            ratio: +form[`ratio${_index}`],
+            refundRatio: +form[`refundRatio${_index}`],
             groupTeacherType: form[`groupTeacherType${_index}`]
           })
         })
         const params = { data: { groupName, id, coursePackages, teachers }}
         console.log('params', params)
+        debugger
         if (form.id) {
           await TeacherGroupModel.update(params)
         } else {

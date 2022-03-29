@@ -110,11 +110,11 @@ export default {
       dialogFormTemplate: [
         {
           type: 'input',
-          placeholder: '最多输入10个字',
+          placeholder: '最多输入20个字',
           prop: 'chapterName',
           label: '曲目名称',
           labelWidth: '120px',
-          maxlength: 10,
+          maxlength: 20,
           span: 12,
           disabled: false,
           rules: [{ required: true, message: '请输入曲目名称' }]
