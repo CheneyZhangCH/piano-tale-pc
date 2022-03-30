@@ -269,7 +269,6 @@ export default {
       this.latestCourse = 1
       const _accountType = this.$store.getters.accountType
       if (_accountType !== 'SUPER_ADMIN' && item.accountType === 'SUPER_ADMIN') {
-        debugger
         return this.$message.warning('只有超级管理员可以修改超级管理员账号')
       }
 

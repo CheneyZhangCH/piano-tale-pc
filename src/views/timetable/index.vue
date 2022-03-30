@@ -32,7 +32,7 @@
 
 <script>
 import paginationMixin from '@/components/Table/mixin'
-import { CourseModel, PackageModel, TimetableModel } from '@/api/piano'
+import { CourseModel, TimetableModel } from '@/api/piano'
 import { deepClone } from '@/utils'
 
 export default {
@@ -50,8 +50,8 @@ export default {
           fixed: 'right',
           width: '100px',
           list: [
-            { func: vm.handleEdit, formatter(row) { return { type: 'text', label: '修改', disabled: true } } },
-            { func: vm.handleToggleActive, formatter(row) { return { type: 'text', label: row.active ? '关闭' : '开启', disabled: true } } }
+            { func: vm.handleEdit, formatter(row) { return { type: 'text', label: '修改' } } },
+            { func: vm.handleToggleActive, formatter(row) { return { type: 'text', label: row.active ? '关闭' : '开启' } } }
           ]
         }
       ],
@@ -257,11 +257,18 @@ export default {
     },
 
     async handleToggleActive(item) {
-      console.log(item)
       if (this.loading) return
-      const { active, ...rest } = item
       try {
         this.loading = true
+        if (item.active) {
+          const res = await TimetableModel.checkCouldUpdate('updateActive', item.id)
+          if (!res.ok || res.data === false) {
+            return this.$message.warning('当前存在老师或学员关联此课表，不能关闭')
+          }
+        }
+        const detailRes = await TimetableModel.detail({ data: item.id })
+        const { active, ...rest } = detailRes.data
+
         await TimetableModel.updateActive({ data: { active: !active, ...rest }})
         this.$message.success(`${active ? '关闭' : '开启'}成功`)
         await this.handleSearch()
@@ -276,7 +283,7 @@ export default {
       this.dialogForm = deepClone(this.dialogFormTemplate)
 
       for (let i = 2; i <= 7; i++) {
-        const index = this.dialogForm.findIndex(item => item.prop === '' + i)
+        const index = this.dialogForm.findIndex(item => item.prop === ('' + i))
         const timetable = deepClone(this.timetable)
         timetable.forEach(item => { item.prop = item.prop + this.latestTimetable })
         this.dialogForm.splice(index + 1, 0, ...timetable)
@@ -288,35 +295,47 @@ export default {
     async handleEdit(item, index) {
       this.latestBook = 1
       this.latestCourse = 1
-
-      console.log(item)
-      const detailRes = await PackageModel.detail(item.id)
+      const res = await TimetableModel.checkCouldUpdate('update', item.id)
+      if (!res.ok || res.data === false) {
+        return this.$message.warning('当前存在老师或学员关联此课表，不能修改')
+      }
+      const detailRes = await TimetableModel.detail({ data: item.id })
       console.log(detailRes)
-      const { books, coursePackage, courses } = detailRes.data
-      this.dialogFormTitle = '编辑课程包'
-      this.dialogForm = deepClone(this.dialogFormTemplate)
-      const courseForm = {}
-      courses.forEach((c, index) => {
-        const course = deepClone(this.course)
-        course[0].prop = course[0].prop + (index + 1)
-        course[1].prop = course[1].prop + (index + 1)
-        course[0].label = course[0].label + (index + 1)
-        courseForm[course[0].prop] = c.courseId
-        courseForm[course[1].prop] = c.num
-        this.dialogForm.splice(this.dialogForm.length - 1, 0, ...course)
-      })
-      const bookForm = {}
-      books.forEach((c, index) => {
-        const book = deepClone(this.book)
-        book.prop = book.prop + (index + 1)
-        bookForm[book.prop] = c.bookId
-        this.dialogForm.splice(this.dialogForm.length - 1, 0, book)
-      })
+      const { id, active, timetableName, periods } = detailRes.data
 
+      this.dialogFormTitle = '编辑课表'
+      this.dialogForm = deepClone(this.dialogFormTemplate)
+
+      const periodsForm = {}
+      for (let i = 2; i <= 7; i++) {
+        const index = this.dialogForm.findIndex(item => item.prop === '' + i)
+        const subjectPeriods = periods.filter(period => period.dayOfWeek === i) || []
+        subjectPeriods.forEach(period => {
+          const timetable = deepClone(this.timetable)
+          if (period.periodType === 'work') {
+            timetable[1].appendDom = undefined
+            timetable[1].span = 4
+            timetable[2].hidden = false
+            timetable[2].span = 6
+          }
+          if (period.courseType === 'more') {
+            timetable[2].appendDom = undefined
+            timetable[2].span = 4
+            timetable[3].hidden = false
+            timetable[3].span = 6
+          }
+          timetable.forEach(item => { item.prop = item.prop + this.latestTimetable })
+          this.dialogForm.splice(index + 1, 0, ...timetable)
+          periodsForm[timetable[0].prop] = period.periodName
+          periodsForm[timetable[1].prop] = period.periodType
+          periodsForm[timetable[2].prop] = period.courseType
+          periodsForm[timetable[3].prop] = period.courseId
+          this.latestTimetable += 1
+        })
+        console.log('subjectPeriods', subjectPeriods)
+      }
       console.log(this.dialogForm)
-      console.log(courseForm)
-      // debugger
-      this.$refs.dialogForm.open({ ...coursePackage, ...bookForm, ...courseForm })
+      this.$refs.dialogForm.open({ id, active, timetableName, ...periodsForm })
     },
     async handleDialogFormConfirm(form) {
       console.log(form)
@@ -344,7 +363,6 @@ export default {
             timetableId: id
           }
           const _index = this.dialogForm.findIndex(item => item.prop === `periodName${i}`)
-          debugger
           if (_index && _index > index7) {
             period.dayOfWeek = 7
             periods.push(period)
@@ -391,7 +409,7 @@ export default {
         const params = { active: true, timetableName, id, periods }
 
         console.log('params', params)
-        debugger
+        // debugger
 
         const res = form.id ? await TimetableModel.update({ data: params }) : await TimetableModel.add({ data: params })
         console.log(res)

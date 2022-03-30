@@ -376,7 +376,7 @@ export default {
         })
         const params = { data: { groupName, id, coursePackages, teachers }}
         console.log('params', params)
-        debugger
+        // debugger
         if (form.id) {
           await TeacherGroupModel.update(params)
         } else {

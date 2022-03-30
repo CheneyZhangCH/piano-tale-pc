@@ -120,6 +120,10 @@ export const TimetableModel = {
   update(data) {
     return post(`/manager/courseTimetable/update`, data)
   },
+  // 检查课表是否可以修改
+  checkCouldUpdate(operation, timetableId) {
+    return get(`/manager/courseTimetable/checkCouldUpdate?operation=${operation}&timetableId=${timetableId}`)
+  },
   // 切换状态
   updateActive(data) {
     return post(`/manager/courseTimetable/updateActive`, data)
