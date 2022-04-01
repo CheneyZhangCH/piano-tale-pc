@@ -98,10 +98,10 @@ export default {
       dialogFormsTemplate: [
         {
           type: 'input',
-          placeholder: '最多输入5个字',
+          placeholder: '最多输入6个字',
           prop: 'teacherName',
           label: '老师姓名',
-          maxlength: 5,
+          maxlength: 6,
           hidden: true,
           labelWidth: '120px',
           rules: [{ required: true, message: '请输入老师姓名' }]
