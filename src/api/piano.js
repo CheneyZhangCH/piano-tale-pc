@@ -160,6 +160,10 @@ export const AccountModel = {
   updateTeacher(data) {
     return post(`/manager/userAccount/updateTeacherAccount`, data)
   },
+  // 检查老师能否移除某个课程
+  checkRemoveTeacherCourse(data) {
+    return post(`/manager/userAccount/checkRemoveTeacherCourse`, data)
+  },
   // 切换状态
   updateActive(data) {
     return post(`/manager/userAccount/updateActive`, data)

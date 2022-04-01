@@ -26,7 +26,7 @@
 
     <aika-dialogForm
       ref="dialogForm"
-      width="620px"
+      width="660px"
       :title="dialogFormTitle"
       :forms="dialogForms"
       @handleConfirm="handleDialogFormConfirm"
@@ -50,6 +50,14 @@ export default {
     const validatePhone = (rule, value, callback) => {
       if (!/^(1[3-9])[0-9]{9}$/.test(value)) {
         callback(new Error('请输入正确的手机号码'))
+      } else {
+        callback()
+      }
+    }
+
+    const validateUnitPrice = (rule, value, callback) => {
+      if (!/(^100000$)|(^100000\.0$)|(^100000\.00$)|(^\d{1,5}(\.\d{1,5})?$)/.test(value)) {
+        callback(new Error('请输入最大100000, 最多2位小数'))
       } else {
         callback()
       }
@@ -172,15 +180,16 @@ export default {
           rules: [{ required: true, message: '请选择课程分类' }]
         },
         {
-          type: 'inputNumber',
+          type: 'input',
           placeholder: '输入课单价，最大100000，最多2位小数',
           prop: 'unitPrice',
-          rules: [{ required: true, message: '请输入课单价' }],
+          // rules: [{ required: true, message: '请输入课单价' }],
+          rules: [{ validator: validateUnitPrice }],
           label: '',
           labelWidth: '0px',
-          min: 1,
-          max: 100000,
-          precision: 2,
+          // min: 1,
+          // max: 100000,
+          // precision: 2,
           span: 12,
           hidden: false,
           appendDom: [
@@ -353,14 +362,34 @@ export default {
       this.dialogForms.splice(index + 1, 0, ...course)
       console.log('this.dialogForm', this.dialogForms)
     },
-    handleRemoveCourse(index) {
+    async handleRemoveCourse(index) {
       console.log('index', index)
       const courses = this.dialogForms.filter(item => item.prop.startsWith('courseId'))
       if (courses.length <= 1) {
         return this.$message.warning('课程分类不能少于1条')
       }
+      console.log(this.dialogForms[index])
+      console.log(this.$refs.dialogForm.$refs.form.form)
+      const { id } = (this.$refs.dialogForm.$refs.form.form || {})
+      const courseId = this.dialogForms[index].prop.replace('unitPrice', '')
+      console.log(courseId)
+      const params = {
+        data: {
+          removeCourseIds: [courseId],
+          teacherId: id
+        }
+      }
+      const res = await AccountModel.checkRemoveTeacherCourse(params)
+      console.log(res)
+      if (!res.ok || !res.data) {
+        return this.$message.warning('存在未计算的消课，不能删除课程分类，以免无法结算')
+      }
+
       this.dialogForms.splice(index - 1, 2)
+      delete this.$refs.dialogForm.$refs.form.form[`courseId${courseId}`]
+      delete this.$refs.dialogForm.$refs.form.form[`unitPrice${courseId}`]
       console.log('this.dialogForm', this.dialogForms)
+      console.log(this.$refs.dialogForm.$refs.form.form)
     },
     async handleDialogFormConfirm(form) {
       console.log(form)

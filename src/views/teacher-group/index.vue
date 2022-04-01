@@ -338,6 +338,14 @@ export default {
       if (items.length <= 1) {
         return this.$message.warning('老师不能少于1条')
       }
+
+      console.log(this.dialogForms[index])
+      const teacherId = this.dialogForms[index].prop.replace('refundRatio', '')
+      delete this.$refs.dialogForm.$refs.form.form[`groupTeacherType${teacherId}`]
+      delete this.$refs.dialogForm.$refs.form.form[`teacherId${teacherId}`]
+      delete this.$refs.dialogForm.$refs.form.form[`ratio${teacherId}`]
+      delete this.$refs.dialogForm.$refs.form.form[`refundRatio${teacherId}`]
+
       this.dialogForms.splice(index - 3, 4)
       console.log('this.dialogForm', this.dialogForms)
     },
