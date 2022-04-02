@@ -373,16 +373,18 @@ export default {
       const { id } = (this.$refs.dialogForm.$refs.form.form || {})
       const courseId = this.dialogForms[index].prop.replace('unitPrice', '')
       console.log(courseId)
-      const params = {
-        data: {
-          removeCourseIds: [courseId],
-          teacherId: id
+      if (id) {
+        const params = {
+          data: {
+            removeCourseIds: [courseId],
+            teacherId: id
+          }
         }
-      }
-      const res = await AccountModel.checkRemoveTeacherCourse(params)
-      console.log(res)
-      if (!res.ok || !res.data) {
-        return this.$message.warning('存在未计算的消课，不能删除课程分类，以免无法结算')
+        const res = await AccountModel.checkRemoveTeacherCourse(params)
+        console.log(res)
+        if (!res.ok || !res.data) {
+          return this.$message.warning('存在未计算的消课，不能删除课程分类，以免无法结算')
+        }
       }
 
       this.dialogForms.splice(index - 1, 2)
