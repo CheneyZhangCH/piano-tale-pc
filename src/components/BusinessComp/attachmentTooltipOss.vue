@@ -97,6 +97,8 @@ import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 // import { getOssThumb } from '@/utils/ossImage'
 import { QiniuModel } from '@/api/qiniu'
 import * as qiniu from 'qiniu-js'
+import { v4 as uuid } from 'uuid'
+
 export default {
   name: 'AttachmentTooltip',
   components: {
@@ -198,11 +200,16 @@ export default {
       console.log('res', res)
       const { file } = options
       const { name, type } = file
+      const _name = uuid()
+      debugger
+      const affixName = name.split('.').reverse()[0]
 
       const { folder } = this.item
+
+      debugger
       const loading = this.$loading({ lock: true, text: '上传中', spinner: 'el-icon-loading', background: 'rgba(0, 0, 0, 0.5)' })
       try {
-        const observable = qiniu.upload(file, (folder ? folder + '/' : '') + name, token)
+        const observable = qiniu.upload(file, (folder ? folder + '/' : '') + _name + '.' + affixName, token)
         observable.subscribe(
           (res) => {
             console.log('next', res)

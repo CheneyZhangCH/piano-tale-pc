@@ -227,7 +227,7 @@ export default {
           labelWidth: '120px',
           columns: [
             { label: '排序', value: 'sortNo', formatter(row, column, cellValue, index) { return row.sortNo } },
-            { label: '视频名称', value: 'fileName' },
+            { label: '视频名称', value: 'fileName', formatter(row, column, cellValue, index) { return row.fileName.split('.')[0] } },
             {
               type: 'operation', label: '操作', fixed: 'right',
               list: [
