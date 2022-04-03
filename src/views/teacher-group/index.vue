@@ -315,6 +315,11 @@ export default {
       if (items.length <= 1) {
         return this.$message.warning('课程包不能少于1条')
       }
+
+      const packageId = this.dialogForms[index].prop.replace('packageRatio', '')
+      delete this.$refs.dialogForm.$refs.form.form[`packageRatio${packageId}`]
+      delete this.$refs.dialogForm.$refs.form.form[`packageId${packageId}`]
+
       this.dialogForms.splice(index - 1, 2)
       console.log('this.dialogForm', this.dialogForms)
     },
