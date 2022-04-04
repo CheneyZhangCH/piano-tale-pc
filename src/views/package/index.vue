@@ -378,8 +378,7 @@ export default {
       course[1].prop = course[1].prop + this.latestCourse
       course[0].label = course[0].label + this.latestCourse
       console.log('this.dialogForm', this.dialogForm)
-      debugger
-      this.dialogForm.splice(this.dialogForm.length - 3, 0, ...course)
+      this.dialogForm.splice(this.dialogForm.length - 2, 0, ...course)
       console.log('this.dialogForm', this.dialogForm)
     },
     handleRemoveCourse(index) {
