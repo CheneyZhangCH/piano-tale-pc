@@ -38,6 +38,13 @@ export default {
   name: 'Package',
   mixins: [paginationMixin],
   data() {
+    const validateInteger = (rule, value, callback) => {
+      if (!/\d{1,5}$/.test(value)) {
+        callback(new Error('请输入正整数，最大99999'))
+      } else {
+        callback()
+      }
+    }
     const vm = this
     return {
       columns: [
@@ -140,15 +147,13 @@ export default {
           appendDom: { text: '月' }
         },
         {
-          type: 'inputNumber',
+          type: 'input',
           placeholder: '请输入正整数',
           prop: 'sortNo',
-          rules: [{ required: true, message: '请输入正整数' }],
+          rules: [{ validator: validateInteger }],
           label: '排序',
           labelWidth: '120px',
           span: 24,
-          min: 1,
-          max: 99999,
           disabled: false,
           precision: 0,
           appendDom: { text: '数字越大，排序越靠后' }
@@ -372,7 +377,9 @@ export default {
       course[0].prop = course[0].prop + this.latestCourse
       course[1].prop = course[1].prop + this.latestCourse
       course[0].label = course[0].label + this.latestCourse
-      this.dialogForm.splice(this.dialogForm.length - 2, 0, ...course)
+      console.log('this.dialogForm', this.dialogForm)
+      debugger
+      this.dialogForm.splice(this.dialogForm.length - 3, 0, ...course)
       console.log('this.dialogForm', this.dialogForm)
     },
     handleRemoveCourse(index) {
@@ -381,6 +388,13 @@ export default {
       if (courses.length <= 1) {
         return this.$message.warning('课程分类不能少于1条')
       }
+
+      console.log(this.dialogForm)
+      console.log(this.dialogForm[index])
+      const courseId = this.dialogForm[index].prop.replace('num', '')
+      delete this.$refs.dialogForm.$refs.form.form[`courseId${courseId}`]
+      delete this.$refs.dialogForm.$refs.form.form[`num${courseId}`]
+
       this.dialogForm.splice(index - 1, 2)
       console.log('this.dialogForm', this.dialogForm)
     },
@@ -389,7 +403,7 @@ export default {
       this.latestBook += 1
       book.prop = book.prop + this.latestBook
       book.label = book.label + this.latestBook
-      this.dialogForm.splice(this.dialogForm.length - 2, 0, book)
+      this.dialogForm.splice(this.dialogForm.length - 1, 0, book)
     },
     handleRemoveBook(index) {
       console.log('index', index)
@@ -397,6 +411,12 @@ export default {
       if (books.length <= 1) {
         return this.$message.warning('教材不能少于1条')
       }
+
+      console.log(this.dialogForm)
+      console.log(this.dialogForm[index])
+      const deletedId = this.dialogForm[index].prop.replace('bookId', '')
+      delete this.$refs.dialogForm.$refs.form.form[`bookId${deletedId}`]
+
       this.dialogForm.splice(index, 1)
       console.log('this.dialogForm', this.dialogForm)
     }
