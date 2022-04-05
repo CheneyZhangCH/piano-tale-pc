@@ -18,7 +18,7 @@
     <slot name="custom" />
     <template v-for="(item, index) in forms">
       <el-col v-if="!item.hidden" :key="item.prop + index" :span="item.span || spanCount" :style="item.colStyle" :class="item.className">
-        <el-form-item v-if="!item.ownForm" :class="item.className || item.inputType || item.type" :label="`${item.label || ''}`" :prop="item.prop" :rules="item.rules" :label-width="item.labelWidth" :style="item.style">
+        <el-form-item v-if="!item.ownForm && item.prop !== 'br'" :class="item.className || item.inputType || item.type" :label="`${item.label || ''}`" :prop="item.prop" :rules="item.rules" :label-width="item.labelWidth" :style="item.style">
           <custom-prepend-dom v-if="item.prependDom" :item="item.prependDom" />
           <template v-if="!item.label || item.labelStyle || item.requiredSign || item.tooltip || item.type === 'subTitle' || item.labelIcon" #label>
             <span v-if="!item.label" />
@@ -178,6 +178,9 @@
           </template>
           <custom-append-dom v-if="item.appendDom && !Array.isArray(item.appendDom)" :item="item.appendDom" :index="index" :origin="item" />
         </el-form-item>
+        <template v-else-if="item.prop === 'br'">
+          <span class="br-empty" />
+        </template>
         <template v-else>
           <ownform-input-group v-if="item.type === 'inputGroup'" :item="item" :form="form" />
         </template>

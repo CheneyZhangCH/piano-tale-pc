@@ -40,6 +40,13 @@ export default {
   mixins: [paginationMixin],
   data() {
     const vm = this
+    const validateInteger = (rule, value, callback) => {
+      if (!/\d{1,5}$/.test(value)) {
+        callback(new Error('请输入正整数，最大99999'))
+      } else {
+        callback()
+      }
+    }
     return {
       columns: [
         { label: '课表名称', value: 'timetableName', width: '160px' },
@@ -148,13 +155,33 @@ export default {
       latestTimetable: 1,
       timetable: [
         {
+          hidden: true, // 是否已被使用, 一直隐藏
+          type: 'input',
+          prop: 'id'
+        },
+        {
+          hidden: true, // 是否已被使用, 一直隐藏
+          type: 'input',
+          prop: 'studentUsed'
+        },
+        {
+          type: 'input',
+          placeholder: '请输入排序',
+          prop: 'sortNo',
+          label: '',
+          labelWidth: '0px',
+          span: 4,
+          disabled: false,
+          rules: [{ validator: validateInteger }]
+        },
+        {
           type: 'input',
           placeholder: '最多输入20个字',
           prop: 'periodName',
           label: '',
           labelWidth: '0px',
           maxlength: 20,
-          span: 10,
+          span: 6,
           disabled: false,
           className: 'widthMedium2',
           rules: [{ required: true, message: '请输入' }]
@@ -168,9 +195,10 @@ export default {
           span: 6,
           rules: [{ required: true, message: '请选择' }],
           func: this.handlePeriodTypeChange,
+          disabled: false,
           appendDom: [
-            { type: 'button', color: 'text', text: '添加', func: this.handleAddTimetable },
-            { type: 'button', color: 'text', text: '删除', func: this.handleRemoveTimetable }
+            { type: 'button', color: 'text', text: '添加', disabled: false, func: this.handleAddTimetable },
+            { type: 'button', color: 'text', text: '删除', disabled: false, func: this.handleRemoveTimetable }
           ]
         },
         {
@@ -185,8 +213,8 @@ export default {
           rules: [{ required: true, message: '课程分类名称' }],
           func: vm.handleToggleCourseType,
           appendDom: [
-            { type: 'button', color: 'text', text: '添加', func: this.handleAddTimetable },
-            { type: 'button', color: 'text', text: '删除', func: this.handleRemoveTimetable }
+            { type: 'button', color: 'text', text: '添加', disabled: false, func: this.handleAddTimetable },
+            { type: 'button', color: 'text', text: '删除', disabled: false, func: this.handleRemoveTimetable }
           ]
         },
         {
@@ -200,9 +228,14 @@ export default {
           hidden: true,
           rules: [{ required: true, message: '请选择课程分类' }],
           appendDom: [
-            { type: 'button', color: 'text', text: '添加', func: this.handleAddTimetable },
-            { type: 'button', color: 'text', text: '删除', func: this.handleRemoveTimetable }
+            { type: 'button', color: 'text', text: '添加', disabled: false, func: this.handleAddTimetable },
+            { type: 'button', color: 'text', text: '删除', disabled: false, func: this.handleRemoveTimetable }
           ]
+        },
+        {
+          type: 'br',
+          prop: 'br',
+          span: 24
         }
         // {
         //   type: 'inputNumber',
@@ -224,8 +257,8 @@ export default {
         // }
       ],
       appendDom: [
-        { type: 'button', color: 'text', text: '添加', func: this.handleAddTimetable },
-        { type: 'button', color: 'text', text: '删除', func: this.handleRemoveTimetable }
+        { type: 'button', color: 'text', text: '添加', disabled: false, func: this.handleAddTimetable },
+        { type: 'button', color: 'text', text: '删除', disabled: false, func: this.handleRemoveTimetable }
       ]
     }
   },
@@ -295,10 +328,10 @@ export default {
     async handleEdit(item, index) {
       this.latestBook = 1
       this.latestCourse = 1
-      const res = await TimetableModel.checkCouldUpdate('update', item.id)
-      if (!res.ok || res.data === false) {
-        return this.$message.warning('当前存在老师或学员关联此课表，不能修改')
-      }
+      // const res = await TimetableModel.checkCouldUpdate('update', item.id)
+      // if (!res.ok || res.data === false) {
+      //   return this.$message.warning('当前存在老师或学员关联此课表，不能修改')
+      // }
       const detailRes = await TimetableModel.detail({ data: item.id })
       console.log(detailRes)
       const { id, active, timetableName, periods } = detailRes.data
@@ -310,26 +343,38 @@ export default {
       for (let i = 2; i <= 7; i++) {
         const index = this.dialogForm.findIndex(item => item.prop === '' + i)
         const subjectPeriods = periods.filter(period => period.dayOfWeek === i) || []
+        subjectPeriods.sort((prev, next) => next.sortNo - prev.sortNo)
         subjectPeriods.forEach(period => {
           const timetable = deepClone(this.timetable)
           if (period.periodType === 'work') {
-            timetable[1].appendDom = undefined
-            timetable[1].span = 4
-            timetable[2].hidden = false
-            timetable[2].span = 6
+            timetable[4].appendDom = undefined
+            timetable[4].span = 4
+            timetable[5].hidden = false
+            timetable[5].span = 6
           }
           if (period.courseType === 'more') {
-            timetable[2].appendDom = undefined
-            timetable[2].span = 4
-            timetable[3].hidden = false
-            timetable[3].span = 6
+            timetable[5].appendDom = undefined
+            timetable[5].span = 4
+            timetable[6].hidden = false
+            timetable[6].span = 6
+          }
+          if (period.studentUsed) {
+            timetable.forEach(item => {
+              if (!item.prop.includes('periodName') && !item.prop.includes('sortNo')) item.disabled = true
+            })
+            if (timetable[4].appendDom) timetable[4].appendDom.forEach(btn => { if (btn.text === '删除') btn.disabled = true })
+            if (timetable[5].appendDom) timetable[5].appendDom.forEach(btn => { if (btn.text === '删除') btn.disabled = true })
+            if (timetable[6].appendDom) timetable[6].appendDom.forEach(btn => { if (btn.text === '删除') btn.disabled = true })
           }
           timetable.forEach(item => { item.prop = item.prop + this.latestTimetable })
           this.dialogForm.splice(index + 1, 0, ...timetable)
-          periodsForm[timetable[0].prop] = period.periodName
-          periodsForm[timetable[1].prop] = period.periodType
-          periodsForm[timetable[2].prop] = period.courseType
-          periodsForm[timetable[3].prop] = period.courseId
+          periodsForm[timetable[0].prop] = period.id
+          periodsForm[timetable[1].prop] = period.studentUsed
+          periodsForm[timetable[2].prop] = period.sortNo
+          periodsForm[timetable[3].prop] = period.periodName
+          periodsForm[timetable[4].prop] = period.periodType
+          periodsForm[timetable[5].prop] = period.courseType
+          periodsForm[timetable[6].prop] = period.courseId
           this.latestTimetable += 1
         })
         console.log('subjectPeriods', subjectPeriods)
@@ -355,6 +400,9 @@ export default {
         for (let i = 0; i <= this.latestTimetable; i++) {
           const period = {
             dayOfWeek: 0,
+            id: +form[`id${i}`],
+            studentUsed: form[`studentUsed${i}`],
+            sortNo: +form[`sortNo${i}`],
             periodName: form[`periodName${i}`],
             periodType: form[`periodType${i}`],
             courseType: form[`courseType${i}`],
@@ -448,7 +496,7 @@ export default {
       const items = deepClone(this.timetable)
       this.latestTimetable += 1
       items.forEach(item => { item.prop = item.prop + this.latestTimetable })
-      const _index = index + (/periodType/.test(origin.prop) ? 3 : /courseType/ig.test(origin.prop) ? 2 : 1)
+      const _index = index + (/periodType/.test(origin.prop) ? 4 : /courseType/ig.test(origin.prop) ? 3 : 2)
       this.dialogForm.splice(_index, 0, ...items)
       console.log(this.dialogForm)
     },
@@ -456,8 +504,8 @@ export default {
       console.log('index', index)
       console.log('this.timetable', this.timetable)
       // const _index = /periodType/ig.test(origin.prop) ? index - 1 : index - 2
-      const _index = index - (/periodType/.test(origin.prop) ? 1 : /courseType/ig.test(origin.prop) ? 2 : 3)
-      this.dialogForm.splice(_index, 4)
+      const _index = index - (/periodType/.test(origin.prop) ? 2 : /courseType/ig.test(origin.prop) ? 3 : 4)
+      this.dialogForm.splice(_index, 8)
     }
   }
 }

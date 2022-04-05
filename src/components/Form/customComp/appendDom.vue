@@ -8,7 +8,7 @@
 -->
 <template>
   <div class="append-dom">
-    <el-button v-if="item.type === 'button'" :type="item.color" @click="item.func ? item.func(index, origin) : {}">{{ item.text }}</el-button>
+    <el-button v-if="item.type === 'button'" :type="item.color" :disabled="item.disabled" @click="item.func ? item.func(index, origin) : {}">{{ item.text }}</el-button>
 
     <el-tooltip v-else-if="item.type === 'tooltip'" :effect="item.effect || 'dark'" :content="item.content" :placement="item.placement || 'top'">
       <i class="iconfont" :class="item.icon" />
@@ -31,7 +31,8 @@ export default {
   mixins: [compProps],
   props: {
     index: {
-      type: Number
+      type: Number,
+      default: 0
     },
     origin: {
       type: Object,
