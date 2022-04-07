@@ -141,12 +141,10 @@ export default {
 
       const courseId = this.forms[index].prop.replace('bonus', '')
       console.log(this.$refs.form.form)
-      debugger
       delete this.$refs.form.form[`bonus${courseId}`]
       delete this.$refs.form.form[`toPackageId${courseId}`]
       delete this.$refs.form.form[`fromPackageId${courseId}`]
       console.log(this.$refs.form.form)
-      debugger
 
       this.forms.splice(index - 2, 3)
       console.log('this.dialogForm', this.forms)
