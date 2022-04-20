@@ -143,7 +143,7 @@ export default {
           prop: 'unitName',
           label: '单元名称',
           labelWidth: '120px',
-          maxlength: 10,
+          maxlength: 30,
           span: 12,
           rules: [{ required: true, message: '请输入单元名称' }]
         },
