@@ -126,7 +126,7 @@ export default {
           requiredSign: true,
           add: true,
           multiple: false,
-          folder: 'img',
+          folder: 'pc',
           accept: 'image/jpeg, image/jpg, image/png, image/HEIC',
           exceedTips: '附件最多可上传1张！',
           limit: 1,
@@ -208,7 +208,7 @@ export default {
           prop: 'videos',
           span: 24,
           // requiredSign: true,
-          rules: [{ required: true, message: '请上传视频' }],
+          // rules: [{ required: true, message: '请上传视频' }],
           add: true,
           multiple: true,
           folder: 'video',
@@ -570,5 +570,10 @@ export default {
 .card-wrap {
   display: flex;
   flex-wrap: wrap;
+}
+.block {
+  &+.block {
+    margin-top: 40px;
+  }
 }
 </style>

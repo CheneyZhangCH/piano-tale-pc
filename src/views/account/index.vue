@@ -123,7 +123,7 @@ export default {
           requiredSign: true,
           add: true,
           multiple: false,
-          folder: 'img',
+          folder: 'pc',
           accept: 'image/jpeg, image/jpg, image/png, image/HEIC',
           exceedTips: '附件最多可上传1张！',
           limit: 1,

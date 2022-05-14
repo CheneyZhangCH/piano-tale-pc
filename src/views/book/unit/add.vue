@@ -151,7 +151,7 @@ export default {
           prop: 'videos',
           span: 24,
           // requiredSign: true,
-          rules: [{ required: true, message: '请上传视频' }],
+          // rules: [{ required: true, message: '请上传视频' }],
           add: true,
           multiple: true,
           folder: 'video',
