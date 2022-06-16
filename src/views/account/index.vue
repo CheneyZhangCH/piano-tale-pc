@@ -148,7 +148,7 @@ export default {
           prop: 'salary',
           rules: [{ required: true, message: '底薪必填' }],
           label: '底薪',
-          min: 1,
+          min: 0,
           max: 999999,
           precision: 2,
           labelWidth: '120px',

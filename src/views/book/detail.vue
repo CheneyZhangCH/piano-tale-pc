@@ -483,6 +483,7 @@ export default {
         const _index = key.replace('workStep', '')
         return { content: form[key], sortNo: +_index }
       })
+      workStep.sort((prev, next) => prev.sortNo - next.sortNo).forEach((step, stepIndex) => { step.sortNo = stepIndex + 1 })
       const params = {
         chapter: { bookId: +id, chapterName, id: chapterId, courseId, knowledge, sortNo, unitId, workStep },
         videos: videos.map(item => ({ videoName: item.fileName, videoUrl: item.fileUrl, chapterId, id: item.id, sortNo: item.sortNo }))
@@ -523,6 +524,14 @@ export default {
       if (steps.length <= 1) {
         return this.$message.warning('作业步骤不能少于1条')
       }
+      console.log('index', index)
+      console.log(this.chapterDialogForm[index])
+
+      const _id = this.chapterDialogForm[index].prop.replace('workStep', '')
+      console.log(this.$refs.chapterDialogForm)
+      delete this.$refs.chapterDialogForm.$refs.form.form[`workStep${_id}`]
+      console.log(this.$refs.chapterDialogForm.form)
+
       this.chapterDialogForm.splice(index, 1)
     },
 
