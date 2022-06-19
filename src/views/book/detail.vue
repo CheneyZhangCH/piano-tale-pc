@@ -197,7 +197,7 @@ export default {
           labelWidth: '120px',
           span: 24,
           min: 1,
-          max: 99,
+          max: 999,
           disabled: false,
           precision: 0
         },
