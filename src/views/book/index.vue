@@ -18,6 +18,7 @@
       :page-size.sync="pageSize"
       :total="total"
       :page-sizes="pageSizes"
+      @current-change="handleCurrentChange"
     />
 
     <aika-dialogForm
